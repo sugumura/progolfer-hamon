@@ -1,0 +1,23 @@
+{
+  "name": "progolfer-hamon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {
+    "pixi.js": "^4.3.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sugumura/progolfer-hamon.git"
+  },
+  "author": "HAMON",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sugumura/progolfer-hamon/issues"
+  },
+  "homepage": "https://github.com/sugumura/progolfer-hamon#readme"
+}
