@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "pixi-action": "^1.0.1",
     "pixi.js": "^4.3.4"
   },
   "devDependencies": {
