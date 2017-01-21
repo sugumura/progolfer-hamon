@@ -9,7 +9,7 @@ queue.on("complete", handleComplete, this);
 
 queue.loadManifest([
     {id: "space", src: 'assets/images/Space_view.jpg'},
-    {id: "start", src: 'assets/images/start.png'}
+    // {id: "start", src: 'assets/images/start.png'}
 ]);
 
 var setting = {
@@ -76,7 +76,7 @@ function handleComplete(event) {
    
     var bitmap = new createjs.Bitmap(queue.getResult('space'));
 
-    var start = asset.createAssets(queue.getResult('start'), 259, 576);
+    // var start = asset.createAssets(queue.getResult('start'), 259, 576);
 
 
         var bitmap = new createjs.Bitmap(queue.getResult('space'));
