@@ -67,9 +67,16 @@ function init(event) {
         // console.log(e);
         stage.update();
     });
+}
 
-
-        var bitmap = new createjs.Bitmap(queue.getResult('space'));
+/**
+ * リソース読み込み完了時
+ * @param event
+ */
+function handleComplete(event) {
+    console.log("test",event);
+   
+    var bitmap = new createjs.Bitmap(queue.getResult('space'));
 
     var start = asset.createAssets(queue.getResult('start'), 259, 576);
 
@@ -78,5 +85,5 @@ function init(event) {
         bitmap.y = 0;
 
     stage.addChildAt(bitmap, 1);
-
+    stage.addChild(start);
  }
