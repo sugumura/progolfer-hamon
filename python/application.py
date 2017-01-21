@@ -112,7 +112,7 @@ def startgameservice(reqstr):
         star=Progolferhamon.Star(259,68,0.1)
         star.x=itm["x"]
         star.y=itm["y"]
-        star.glavity=itm["glavity"]
+        star.grabity=itm["grabity"]
         model.Stars.append(star)
 
     logger.info("--Create Position")
