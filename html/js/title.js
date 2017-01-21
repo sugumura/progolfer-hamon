@@ -8,7 +8,7 @@ queue.installPlugin(createjs.Sound);
 queue.on("complete", handleComplete, this);
 
 queue.loadManifest([
-    {id: "space", src: 'assets/images/Space_view.jpg'}
+    {id: "space", src: 'assets/images/Space_view.jpg'},
     {id: "start", src: 'assets/images/start.png'}
 ]);
 
