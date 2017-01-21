@@ -301,7 +301,7 @@ function AddScore() {
 	rocketinstance.play('none', 0, 0, 0, 1, 0);
  
 	//びーじーえむ
-	var bgminstance = createjs.Sound.createInstance('bgm');
-	bgminstance.play('none', 0, 0, -1, 1, 0);
+	//var bgminstance = createjs.Sound.createInstance('bgm');
+	//bgminstance.play('none', 0, 0, 0, 1, 0);
  }
  
