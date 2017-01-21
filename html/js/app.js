@@ -14,7 +14,7 @@ queue.loadManifest([
     {id: "planet2", src: 'assets/images/planet2.png'},
     {id: "planet3", src: 'assets/images/planet3.png'},
     {id: "planet4", src: 'assets/images/planet4.png'},
-    {id: "planet5", src: 'assets/images/planet5.png'}
+    {id: "planet5", src: 'assets/images/planet5.png'},
     {id: "space", src: 'assets/images/Space_view.jpg'}
 ]);
 
