@@ -59,7 +59,7 @@ function init(event) {
     stage = new createjs.Stage("GameWindow");
 
     // window.location.href = 'パス名'; // 通常の遷移
-    // window.open('パス名', '_blank'); // 新しいタブを開き、ページを表示
+    
     var sidebar = setting.sidebar();
     stage.addChild(sidebar);
 
@@ -81,7 +81,12 @@ function handleComplete(event) {
         // アンカーを中心にする
         bitmap.x = 0;
         bitmap.y = 0;
-
+        gameover.addEventListener("click", test);
     stage.addChildAt(bitmap,1);
 
  }
+
+function test (event){
+     // body...
+        window.location.href = './gameover.html'; // 通常の遷移
+ } 
