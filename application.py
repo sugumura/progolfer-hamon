@@ -97,7 +97,10 @@ def application(environ, start_response):
                 logger.info("--Response Data 1")
                 logger.info(response)
                 status = '200 OK'
-                headers = [('Content-type', 'application/json')]
+                headers = [('Content-type', 'application/json'),
+                           ('Access-Control-Allow-Origin', '*'),
+                           ('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE'),
+                           ('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Origin, Authorization')]
                 start_response(status, headers)
                 logger.info('return response')
                 return [response.encode('utf-8')]
@@ -108,9 +111,13 @@ def application(environ, start_response):
         status = '200 OK'
         headers = [('Content-type', 'application/json')]
     else:
-        response = welcome
+        response = ''
         status = '200 OK'
-        headers = [('Content-type', 'text/html')]
+        headers = [('Content-type', 'application/json'),
+                   ('Access-Control-Allow-Origin', '*'),
+                   ('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE'),
+                   ('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Origin, Authorization')
+                   ]
 
     logger.info('create response')
     start_response(status, headers)
@@ -158,6 +165,6 @@ def startgameservice(reqstr):
 
 
 if __name__ == '__main__':
-    httpd = make_server('', 8080, application)
-    print("Serving on port 8080...")
+    httpd = make_server('', 8000, application)
+    print("Serving on port 8000...")
     httpd.serve_forever()
