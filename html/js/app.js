@@ -208,17 +208,6 @@ function request(event) {
 }
 
 /**
- * アンカーを中心にする
- * @param item
- * @returns {*}
- */
-function anchorCenter(item) {
-    item.regX = item.getBounds().width / 2;
-    item.regY = item.getBounds().height / 2;
-    return item;
-}
-
-/**
  * 点数追加したいよ！
  */
  function AddScore(event){
