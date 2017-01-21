@@ -15,7 +15,7 @@ queue.loadManifest([
     {id: "planet3", src: 'assets/images/planet3.png'},
     {id: "planet4", src: 'assets/images/planet4.png'},
     {id: "planet5", src: 'assets/images/planet5.png'}
-
+    {id: "space", src: 'assets/images/Space_view.jpg'}
 ]);
 
 var setting = {
@@ -81,12 +81,20 @@ function handleComplete(event) {
     var star = asset.createAssets(queue.getResult('star'), 259, 100);
     stage.addChild(star);
 
+ 
     var diff = 120;
     var planet1 = asset.createAssets(queue.getResult('planet1'), 643, 668);
     var planet2 = asset.createAssets(queue.getResult('planet2'), 643, 668 - diff);
     var planet3 = asset.createAssets(queue.getResult('planet3'), 643, 668 - diff * 2);
     var planet4 = asset.createAssets(queue.getResult('planet4'), 643, 668 - diff * 3);
     var planet5 = asset.createAssets(queue.getResult('planet5'), 643, 668 - diff * 4);
+
+    stage.addChild(bitmap);
+
+　  var bitmap = new createjs.Bitmap(queue.getResult('space'));
+    // アンカーを左上にする
+    bitmap.x = 0;
+    bitmap.y = 0;
 
     stage.addChild(planet1);
     stage.addChild(planet2);
