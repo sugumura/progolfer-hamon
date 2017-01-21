@@ -57,38 +57,45 @@ var game = {
     rocket: {
         name: 'rocket',
         x: 259,
-        y: 668,
-        rotation: 0
+        y: 700,
+        direction: 90,  // 向き
+        speed: 1        // 速度
     },
     star: {
         name: 'star',
         x: 259,
-        y: 100
+        y: 68,
+        gravity: 0.1
     },
     planet1: {
         name: 'planet1',
-        x: 643,
-        y: 668
+        gravity: 0.01,
+        sideX: 643,
+        sideY: 668
     },
     planet2: {
         name: 'planet2',
-        x: 643,
-        y: 668 - 120
+        gravity: 0.005,
+        sideX: 643,
+        sideY: 668 - 120
     },
     planet3: {
         name: 'planet3',
-        x: 643,
-        y: 668 - 120 * 2
+        gravity: 0.0025,
+        sideX: 643,
+        sideY: 668 - 120 * 2
     },
     planet4: {
         name: 'planet4',
-        x: 643,
-        y: 668 - 120 * 3
+        gravity: 0.00125,
+        sideX: 643,
+        sideY: 668 - 120 * 3
     },
     planet5: {
         name: 'planet5',
-        x: 643,
-        y: 668 - 120 * 4
+        gravity: 0.0006125,
+        sideX: 643,
+        sideY: 668 - 120 * 4
     }
 };
 
@@ -110,6 +117,11 @@ var asset = {
         button.addChild(bg);
         button.addChild(text);
         return button;
+    },
+    setXY: function (item, x, y) {
+        item.x = x;
+        item.y = y;
+        return item;
     }
 };
 
@@ -138,7 +150,7 @@ function init(event) {
     reset.addEventListener("click", resetAll);
     stage.addChild(reset);
 
-    createjs.Ticker.setFPS(30);
+    createjs.Ticker.setFPS(60);
     createjs.Ticker.addEventListener('tick', function(e){
         // console.log(e);
         stage.update();
@@ -156,6 +168,15 @@ function resetAll() {
     var planet3 = stage.getChildByName(game.planet3.name);
     var planet4 = stage.getChildByName(game.planet4.name);
     var planet5 = stage.getChildByName(game.planet5.name);
+
+    asset.setXY(rocket, game.rocket.x, game.rocket.y);
+    rocket.rotation = 0;
+    asset.setXY(star, game.star.x, game.star.y);
+    asset.setXY(planet1, game.planet1.sideX, game.planet1.sideY);
+    asset.setXY(planet2, game.planet2.sideX, game.planet2.sideY);
+    asset.setXY(planet3, game.planet3.sideX, game.planet3.sideY);
+    asset.setXY(planet4, game.planet4.sideX, game.planet4.sideY);
+    asset.setXY(planet5, game.planet5.sideX, game.planet5.sideY);
 }
 
 /**
@@ -172,11 +193,11 @@ function handleComplete(event) {
     star.name = game.star.name;
     stage.addChild(star);
 
-    var planet1 = asset.createAssets(queue.getResult('planet1'), game.planet1.x, game.planet1.y);
-    var planet2 = asset.createAssets(queue.getResult('planet2'), game.planet2.x, game.planet2.y);
-    var planet3 = asset.createAssets(queue.getResult('planet3'), game.planet3.x, game.planet3.y);
-    var planet4 = asset.createAssets(queue.getResult('planet4'), game.planet4.x, game.planet4.y);
-    var planet5 = asset.createAssets(queue.getResult('planet5'), game.planet5.x, game.planet5.y);
+    var planet1 = asset.createAssets(queue.getResult('planet1'), game.planet1.sideX, game.planet1.sideY);
+    var planet2 = asset.createAssets(queue.getResult('planet2'), game.planet2.sideX, game.planet2.sideY);
+    var planet3 = asset.createAssets(queue.getResult('planet3'), game.planet3.sideX, game.planet3.sideY);
+    var planet4 = asset.createAssets(queue.getResult('planet4'), game.planet4.sideX, game.planet4.sideY);
+    var planet5 = asset.createAssets(queue.getResult('planet5'), game.planet5.sideX, game.planet5.sideY);
 
     planet1.name = game.planet1.name;
     planet2.name = game.planet2.name;
@@ -198,7 +219,7 @@ function handleComplete(event) {
     var bitmap = new createjs.Bitmap(queue.getResult('space'));
     
     stage.addChildAt(bitmap, 1);
-    
+
     stage.addChild(planet1);
     stage.addChild(planet2);
     stage.addChild(planet3);
@@ -211,35 +232,49 @@ function handleComplete(event) {
     evt.target.y = evt.stageY;
     AddScore();	//点数アップ関数！ lisaco
     });
-    planet1.on("pressup", function(evt) { console.log("up"); })
+
+    planet1.on("pressup", function(evt) {
+        console.log("planet1 up", evt);
+    });
 
     planet2.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
     AddScore();	//点数アップ関数！ lisaco
     });
-    planet2.on("pressup", function(evt) { console.log("up"); })
+    planet2.on("pressup", function(evt) {
+        console.log("planet2", evt);
+    });
 
     planet3.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
     AddScore();	//点数アップ関数！ lisaco
     });
-    planet5.on("pressup", function(evt) { console.log("up"); })
+
+    planet3.on("pressup", function(evt) {
+        console.log("up");
+    });
 
     planet4.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
     AddScore();	//点数アップ関数！ lisaco
     });
-    planet4.on("pressup", function(evt) { console.log("up"); })
+
+    planet4.on("pressup", function(evt) {
+        console.log("up");
+    });
 
     planet5.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
     AddScore();	//点数アップ関数！ lisaco
     });
-    planet5.on("pressup", function(evt) { console.log("up"); })
+
+    planet5.on("pressup", function(evt) {
+        console.log("up");
+    });
     
 	rocket.on("click", function(evt) {
     	bgminstance.stop();
@@ -248,43 +283,54 @@ function handleComplete(event) {
     
 }
 
-var frames = {
-    frames: [
-        {
-            x: 259 - 10,
-            y: 668 - 10,
-            speed: 0,
-            direction: 0
-        },
-        {
-            x: 259 - 130,
-            y: 668 - 10,
-            speed: 0,
-            direction: 180
-        },
-        {
-            x: 259 - 10,
-            y: 668 + 40,
-            speed: 0,
-            direction: 270
-        },
-        {
-            x: 259 - 110,
-            y: 668 - 10,
-            speed: 0,
-            direction: 360
-        }
-    ]
-};
+// var frames = {
+//     frames: [
+//         {
+//             x: 259 - 10,
+//             y: 668 - 10,
+//             speed: 0,
+//             direction: 0
+//         },
+//         {
+//             x: 259 - 130,
+//             y: 668 - 10,
+//             speed: 0,
+//             direction: 180
+//         },
+//         {
+//             x: 259 - 10,
+//             y: 668 + 40,
+//             speed: 0,
+//             direction: 270
+//         },
+//         {
+//             x: 259 - 110,
+//             y: 668 - 10,
+//             speed: 0,
+//             direction: 360
+//         }
+//     ]
+// };
 
-function tweenTest() {
+/**
+ * rocketの移動
+ * {
+ *     x: 0,
+ *     y: 0,
+ *     speed: 0,
+ *     direction: 0
+ * }
+ * @param data
+ */
+function goRocket(data) {
     var rocket = stage.getChildByName(game.rocket.name);
     var tween = createjs.Tween.get(rocket, { loop: false });
-    for (var i = 0, len = frames.frames.length; i < len; i++) {
-        var item = frames.frames[i];
-        tween.to({x: item.x, y: item.y, rotation: item.direction}, 1000)
+    for (var i = 0, len = data.frames.length; i < len; i++) {
+        var item = data.frames[i];
+        tween.to({x: item.x, y: item.y, rotation: -item.direction - 270}, 8)
             .call(onOneSecond);
     }
+    // tween.call(onOneFinish, [data.frames[len]]);
 }
 
 /**
@@ -296,39 +342,71 @@ function onOneSecond(e) {
     console.log('onOnSecond', e.target.x, e.target.y);
 }
 
+function onOneFinish(e) {
+    console.log('onOneFinish');
+}
 
 /**
  * 通信開始
  * @param event
  */
 function request(event) {
-    setTimeout(tweenTest, 1000);
-    axios.post('/test', {
-        starship: {
-            x : 100,
-            y : 100,
-            speed : 10,
-            direction : 45
-        },
-        stars :[
-            {
-                x : 10,
-                y : 20,
-                gravity : 5
+    var p1 = stage.getChildByName(game.planet1.name);
+    var p2 = stage.getChildByName(game.planet2.name);
+    var p3 = stage.getChildByName(game.planet3.name);
+    var p4 = stage.getChildByName(game.planet4.name);
+    var p5 = stage.getChildByName(game.planet5.name);
+
+    var stars = [{
+        x: game.star.x,
+        y: game.star.y,
+        gravity: game.star.gravity
+    }];
+
+
+    stars.push({
+        x: p1.x,
+        y: p1.y,
+        gravity: game.planet1.gravity
+    });
+    stars.push({
+        x: p2.x,
+        y: p2.y,
+        gravity: game.planet2.gravity
+    });
+    stars.push({
+        x: p3.x,
+        y: p3.y,
+        gravity: game.planet3.gravity
+    });
+    stars.push({
+        x: p4.x,
+        y: p4.y,
+        gravity: game.planet4.gravity
+    });
+    stars.push({
+        x: p5.x,
+        y: p5.y,
+        gravity: game.planet5.gravity
+    });
+
+    axios.post('http://127.0.0.1:8000/startgame', {
+            "starship" : {
+                "x" : 259,
+                "y" : 700,
+                "speed" : 1,
+                "direction" : 90
             },
-            {
-                x : 40,
-                y : 50,
-                gravity : 2
+            "stars" : stars,
+            "stageinfo" : {
+                "id" : 1,
+                "name" : "stage01"
             }
-        ],
-        stageinfo : {
-            id : 1,
-            name : "stage01"
         }
-    })
+    )
     .then(function (response) {
         console.log(response);
+        goRocket(response.data);
     })
     .catch(function (error) {
         console.error(error);
