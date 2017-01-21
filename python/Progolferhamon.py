@@ -1,5 +1,5 @@
 # coding: utf-8
-
+import PhysicalCalculation as py
 class ProgolferHamon:
     def __init__(self):
         self.__StarShip=None
@@ -24,19 +24,26 @@ class ProgolferHamon:
 
     def createPositionData(self):
         self.Frames=None
+        self.Frames = py.getCaluculatedFrame(self.StarShip,self.Stars)
 
 class StarShip:
-    def __init__(self):
-        self.x=0
-        self.y=0
-        self.speed=0
-        self.direction=0
+    def __init__(self,x,y,sp,dr):
+        self.x = x
+        self.y = y
+        self.speed = sp
+        self.drection = dr
+    def setData(self,x,y,sp,dr):
+        print("hello")
+        self.x = x
+        self.y = y
+        self.speed = sp
+        self.drection = dr
 
 class Star:
-    def __init__(self):
-        self.x=0
-        self.y=0
-        self.glavity=0
+    def __init__(self,x,y,g):
+        self.x = x
+        self.y = y
+        self.grabity = g
 
 class StageInfo:
     def __init__(self):
