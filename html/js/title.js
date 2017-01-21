@@ -8,8 +8,8 @@ queue.installPlugin(createjs.Sound);
 queue.on("complete", handleComplete, this);
 
 queue.loadManifest([
-    {id: "space", src: 'assets/images/Space_view.jpg'}
-
+    {id: "space", src: 'assets/images/Space_view.jpg'},
+    {id: "start", src: 'assets/images/start.png'}
 ]);
 
 var setting = {
@@ -73,11 +73,19 @@ function init(event) {
  */
 function handleComplete(event) {
     console.log("test",event);
+   
+    var bitmap = new createjs.Bitmap(queue.getResult('space'));
+
+    var start = asset.createAssets(queue.getResult('start'), 259, 576);
+
+
         var bitmap = new createjs.Bitmap(queue.getResult('space'));
+       
+
         // アンカーを中心にする
         bitmap.x = 0;
         bitmap.y = 0;
 
-    stage.addChild(bitmap);
-
+    stage.addChildAt(bitmap, 1);
+    stage.addChild(start);
  }
