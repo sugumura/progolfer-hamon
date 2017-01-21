@@ -3,6 +3,7 @@
 document.addEventListener("DOMContentLoaded", init);
 
 var stage;
+var rocket;
 var queue = new createjs.LoadQueue();
 queue.installPlugin(createjs.Sound);
 queue.on("complete", handleComplete, this);
@@ -92,7 +93,7 @@ function init(event) {
  */
 function handleComplete(event) {
     console.log("test",event);
-    var rocket = asset.createAssets(queue.getResult('rocket'), 259, 668);
+    rocket = asset.createAssets(queue.getResult('rocket'), 259, 668);
     stage.addChild(rocket);
 
     var star = asset.createAssets(queue.getResult('star'), 259, 100);
@@ -115,7 +116,7 @@ function handleComplete(event) {
 
 	stage.addChild(score1);
 
-　  var bitmap = new createjs.Bitmap(queue.getResult('space'));
+    var bitmap = new createjs.Bitmap(queue.getResult('space'));
     // アンカーを左上にする
     // bitmap.x = 0;
     // bitmap.y = 0;
@@ -158,15 +159,59 @@ function handleComplete(event) {
     });
     planet5.on("pressup", function(evt) { console.log("up"); })
 
-    createjs.Tween.get(star, { loop: true })
-        .to({ x: 400 }, 1000, createjs.Ease.getPowInOut(4))
-        .to({ alpha: 0, y: 175 }, 500, createjs.Ease.getPowInOut(2))
-        .to({ alpha: 0, y: 225 }, 100)
-        .to({ alpha: 1, y: 200 }, 500, createjs.Ease.getPowInOut(2))
-        .to({ x: 100 }, 800, createjs.Ease.getPowInOut(2));
-
 	score1.addEventListener("click", AddScore);
+}
 
+var frames = {
+    frames: [
+        {
+            x: 259 - 10,
+            y: 668 - 10,
+            speed: 0,
+            direction: 0
+        },
+        {
+            x: 259 - 130,
+            y: 668 - 10,
+            speed: 0,
+            direction: 180
+        },
+        {
+            x: 259 - 10,
+            y: 668 + 40,
+            speed: 0,
+            direction: 270
+        },
+        {
+            x: 259 - 110,
+            y: 668 - 10,
+            speed: 0,
+            direction: 360
+        }
+    ]
+};
+
+function tweenTest() {
+    var tween = createjs.Tween.get(rocket, { loop: false });
+    for (var i = 0, len = frames.frames.length; i < len; i++) {
+        var item = frames.frames[i];
+        tween.to({x: item.x, y: item.y, rotation: item.direction}, 1000)
+            .call(onOneSecond);
+    }
+        // .to({ x: 400 }, 1000, createjs.Ease.getPowInOut(4))
+        // .to({ alpha: 0, y: 175 }, 500, createjs.Ease.getPowInOut(2))
+        // .to({ alpha: 0, y: 225 }, 100)
+        // .to({ alpha: 1, y: 200 }, 500, createjs.Ease.getPowInOut(2))
+        // .to({ x: 100 }, 800, createjs.Ease.getPowInOut(2));
+}
+
+/**
+ * 1秒毎のフレーム後にコール
+ * 障害物判定などに利用する
+ * @param e
+ */
+function onOneSecond(e) {
+    console.log('onOnSecond', e.target.x, e.target.y);
 }
 
 /**
@@ -174,7 +219,7 @@ function handleComplete(event) {
  * @param event
  */
 function request(event) {
-
+    setTimeout(tweenTest, 1000);
     axios.post('/test', {
         starship: {
             x : 100,
