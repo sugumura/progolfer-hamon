@@ -1,0 +1,25 @@
+#test img{
+    position: absolute;
+    left: 60px;
+    top: 760px;
+    animation:animation-hanabi4 4s 1s forwards;
+}
+@keyframes animation-hanabi4 {
+    from {
+        transform: translateY(1180px);
+    }
+    to {
+        transform: translateY(-700px);
+    }
+}
+
+#test2 img{
+    position:absolute;
+    left:250px;
+    top:560px;
+    -webkit-animation:blink 0.7s ease-in-out infinite alternate;
+}
+@-webkit-keyframes blink{
+    0% {opacity:0;}
+    100% {opacity:1;}
+}

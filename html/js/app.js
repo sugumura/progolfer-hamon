@@ -433,3 +433,13 @@ function AddScore() {
 	//var bgminstance = createjs.Sound.createInstance('bgm');
 	//bgminstance.play('none', 0, 0, 0, 1, 0);
  }
+
+// ゲームオーバーイベント
+
+//function gameOver(event){
+    // if(衝突の条件){
+    //  window.location.href = './gameover.html'; // 通常の遷移
+
+    // }
+    
+ //}

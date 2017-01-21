@@ -36,7 +36,6 @@ var asset = {
     }
 };
 
-
 /**
  * 初期化
  * @param event
@@ -62,8 +61,8 @@ function init(event) {
  */
 function handleComplete(event) {
     console.log("test",event);
-    var titlelogo = asset.createAssets(queue.getResult('titlelogo'), 259, 192);    
-    var bitmap = new createjs.Bitmap(queue.getResult('space')).blur();
+    // var titlelogo = asset.createAssets(queue.getResult('titlelogo'), 259, 192);    
+    var bitmap = new createjs.Bitmap(queue.getResult('space'));
     
      //初期びーじーえむ lisaco
 	var bgminstance = createjs.Sound.createInstance('bgm_title');
@@ -74,7 +73,13 @@ function handleComplete(event) {
         bitmap.y = 0;
 
     stage.addChildAt(bitmap, 1);
-    stage.addChild(start);
-    stage.addChild(titlelogo);
+    // stage.addChild(titlelogo);
     
  }
+
+function test (event){
+     // body...
+     if (onClick('titlelogo')) {
+        window.location.href = './gameover.html'; // 通常の遷移
+     };
+ } 

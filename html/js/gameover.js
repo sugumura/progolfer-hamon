@@ -8,8 +8,8 @@ queue.installPlugin(createjs.Sound);
 queue.on("complete", handleComplete, this);
 
 queue.loadManifest([
-    {id: "space", src: 'assets/images/Space_view.jpg'}
-    {id: "start", src: 'assets/images/start.png'}
+    {id: "space", src: 'assets/images/Space_view.jpg'},
+    {id: "gameover", src: 'assets/images/gameover.png'}
 
 ]);
 
@@ -59,7 +59,7 @@ function init(event) {
     stage = new createjs.Stage("GameWindow");
 
     // window.location.href = 'パス名'; // 通常の遷移
-    // window.open('パス名', '_blank'); // 新しいタブを開き、ページを表示
+    
     var sidebar = setting.sidebar();
     stage.addChild(sidebar);
 
@@ -77,10 +77,16 @@ function init(event) {
 function handleComplete(event) {
     console.log("test",event);
         var bitmap = new createjs.Bitmap(queue.getResult('space'));
+        var gameover = asset.createAssets(queue.getResult('gameover'), 259, 192);
         // アンカーを中心にする
         bitmap.x = 0;
         bitmap.y = 0;
-
-    stage.addChild(bitmap);
+        gameover.addEventListener("click", test);
+    stage.addChildAt(bitmap,1);
 
  }
+
+function test (event){
+     // body...
+        window.location.href = './gameover.html'; // 通常の遷移
+ } 

@@ -1,0 +1,20 @@
+{
+  "name": "progolfer-hamon",
+  "description": "geming",
+  "main": "app.js",
+  "authors": [
+    "HAMON"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "wave"
+  ],
+  "homepage": "http://github.com/sugumura/progolfer-hamon",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
