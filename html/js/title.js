@@ -9,30 +9,16 @@ queue.on("complete", handleComplete, this);
 
 queue.loadManifest([
     {id: "space", src: 'assets/images/Space_view.jpg'},
-    // {id: "start", src: 'assets/images/start.png'}
 ]);
 
 var setting = {
-    background: function () {
-        var background = new createjs.Shape();
-        background.graphics.beginFill("DeepSkyBlue").drawRect(0, 0, 768, 768);
-        background.x = 0;
-        background.y = 0;
-        return background;
-    },
     sidebar: function () {
         var side = new createjs.Shape();
         side.graphics.beginFill("Grey").drawRect(518, 0, 250, 768);
         side.x = 0;
         side.y = 0;
         return side;
-    }
-    // start_Button: function (){
-    //     var start = new createsjs.Shape();
-
-
-    
-
+    }    
 };
 
 var asset = {
