@@ -9,6 +9,7 @@ queue.on("complete", handleComplete, this);
 
 queue.loadManifest([
     {id: "space", src: 'assets/images/Space_view.jpg'},
+    {id: "titlelogo", src: 'assets/images/Titlelogo.png'},
     // {id: "start", src: 'assets/images/start.png'}
 ]);
 
@@ -75,6 +76,7 @@ function handleComplete(event) {
     console.log("test",event);
    
     var bitmap = new createjs.Bitmap(queue.getResult('space'));
+    var titlelogo = asset.createAssets(queue.getResult('titlelogo'), 259, 192);    
 
     // var start = asset.createAssets(queue.getResult('start'), 259, 576);
 
@@ -88,4 +90,5 @@ function handleComplete(event) {
 
     stage.addChildAt(bitmap, 1);
     stage.addChild(start);
+    stage.addChild(titlelogo);
  }
