@@ -63,7 +63,7 @@ function init(event) {
 function handleComplete(event) {
     console.log("test",event);
     var titlelogo = asset.createAssets(queue.getResult('titlelogo'), 259, 192);    
-    var bitmap = new createjs.Bitmap(queue.getResult('space')).blur();
+    var bitmap = new createjs.Bitmap(queue.getResult('space'));
     
      //初期びーじーえむ lisaco
 	var bgminstance = createjs.Sound.createInstance('bgm_title');
