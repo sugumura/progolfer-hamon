@@ -61,7 +61,7 @@ function init(event) {
 function handleComplete(event) {
     console.log("test",event);
     var titlelogo = asset.createAssets(queue.getResult('titlelogo'), 259, 192);    
-    var bitmap = new createjs.Bitmap(queue.getResult('space'));
+    var bitmap = new createjs.Bitmap(queue.getResult('space')).blur();
     
 
         // アンカーを中心にする
