@@ -93,8 +93,8 @@ function handleComplete(event) {
 
 　  var bitmap = new createjs.Bitmap(queue.getResult('space'));
     // アンカーを左上にする
-    bitmap.x = 0;
-    bitmap.y = 0;
+    // bitmap.x = 0;
+    // bitmap.y = 0;
 
     stage.addChild(planet1);
     stage.addChild(planet2);
