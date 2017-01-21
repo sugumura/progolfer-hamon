@@ -41,12 +41,12 @@ class StarShip:
         self.x = x
         self.y = y
         self.speed = sp
-        self.drection = dr
+        self.direction = dr
     def setData(self,x,y,sp,dr):
         self.x = x
         self.y = y
         self.speed = sp
-        self.drection = dr
+        self.direction = dr
 
     def getJson(self):
         #return '{"x":"{0}","y":"{1}","speed":"{1}","direction":"{1}"}'.format(self.x,self.y,self.speed,self.direction)
