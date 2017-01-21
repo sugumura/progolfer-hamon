@@ -8,13 +8,7 @@ queue.installPlugin(createjs.Sound);
 queue.on("complete", handleComplete, this);
 
 queue.loadManifest([
-    {id: "rocket", src: 'assets/images/rocket.png'},
-    {id: "star", src: 'assets/images/star.png'},
-    {id: "planet1", src: 'assets/images/planet1.png'},
-    {id: "planet2", src: 'assets/images/planet2.png'},
-    {id: "planet3", src: 'assets/images/planet3.png'},
-    {id: "planet4", src: 'assets/images/planet4.png'},
-    {id: "planet5", src: 'assets/images/planet5.png'}
+    {id: "space", src: 'assets/images/Space_view.jpg'}
 
 ]);
 
@@ -33,6 +27,12 @@ var setting = {
         side.y = 0;
         return side;
     }
+    // start_Button: function (){
+    //     var start = new createsjs.Shape();
+
+
+    
+
 };
 
 var asset = {
@@ -57,9 +57,7 @@ function init(event) {
     console.log('DOMContentLoaded', event);
     stage = new createjs.Stage("GameWindow");
 
-    var background = setting.background();
     var sidebar = setting.sidebar();
-    stage.addChild(background);
     stage.addChild(sidebar);
 
     createjs.Ticker.setFPS(30);
@@ -75,40 +73,11 @@ function init(event) {
  */
 function handleComplete(event) {
     console.log("test",event);
-    var rocket = asset.createAssets(queue.getResult('rocket'), 259, 668);
-    stage.addChild(rocket);
+        var bitmap = new createjs.Bitmap(queue.getResult('space'));
+        // アンカーを中心にする
+        bitmap.x = 0;
+        bitmap.y = 0;
 
-    var star = asset.createAssets(queue.getResult('star'), 259, 100);
-    stage.addChild(star);
+    stage.addChild(bitmap);
 
-    var diff = 120;
-    var planet1 = asset.createAssets(queue.getResult('planet1'), 643, 668);
-    var planet2 = asset.createAssets(queue.getResult('planet2'), 643, 668 - diff);
-    var planet3 = asset.createAssets(queue.getResult('planet3'), 643, 668 - diff * 2);
-    var planet4 = asset.createAssets(queue.getResult('planet4'), 643, 668 - diff * 3);
-    var planet5 = asset.createAssets(queue.getResult('planet5'), 643, 668 - diff * 4);
-
-    stage.addChild(planet1);
-    stage.addChild(planet2);
-    stage.addChild(planet3);
-    stage.addChild(planet4);
-    stage.addChild(planet5);
-
-    // createjs.Tween.get(star, { loop: true })
-    //     .to({ x: 400 }, 1000, createjs.Ease.getPowInOut(4))
-    //     .to({ alpha: 0, y: 175 }, 500, createjs.Ease.getPowInOut(2))
-    //     .to({ alpha: 0, y: 225 }, 100)
-    //     .to({ alpha: 1, y: 200 }, 500, createjs.Ease.getPowInOut(2))
-    //     .to({ x: 100 }, 800, createjs.Ease.getPowInOut(2));
-}
-
-/**
- * アンカーを中心にする
- * @param item
- * @returns {*}
- */
-function anchorCenter(item) {
-    item.regX = item.getBounds().width / 2;
-    item.regY = item.getBounds().height / 2;
-    return item;
-}
+ }
