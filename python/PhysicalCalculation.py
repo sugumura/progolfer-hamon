@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import numpy as np
-
+import Progolferhamon
 def getPlayerVector(spd,deg):
     player_vector=[]
     player_vector.append(spd*np.cos(np.radians(deg)))
@@ -92,7 +92,7 @@ def getCaluculatedFrame(ship,starlist):
     for f in range(60):
         #print("--------------------------------------")
 
-        current_ship=StarShip(current_ship.x,current_ship.y,current_ship.speed,current_ship.drection)
+        current_ship=Progolferhamon.StarShip(current_ship.x,current_ship.y,current_ship.speed,current_ship.drection)
         current_ship_point_array = []
         current_ship_point_array.append(current_ship.x)
         current_ship_point_array.append(current_ship.y)
