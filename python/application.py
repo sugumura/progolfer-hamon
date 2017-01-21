@@ -98,7 +98,7 @@ def startgameservice(reqstr):
     logger.info("--Create Model")
     model=Progolferhamon.ProgolferHamon()
 
-    model.StarShip=Progolferhamon.StarShip()
+    model.StarShip=Progolferhamon.StarShip(259,700,1,90)
     model.StarShip.x=reqobj["starship"]["x"]
     model.StarShip.y=reqobj["starship"]["y"]
     model.StarShip.speed=reqobj["starship"]["speed"]
@@ -109,7 +109,7 @@ def startgameservice(reqstr):
     model.StageInfo.name=reqobj["stageinfo"]["name"]
 
     for itm in reqobj["stars"]:
-        star=Progolferhamon.Star()
+        star=Progolferhamon.Star(259,68,0.1)
         star.x=itm["x"]
         star.y=itm["y"]
         star.glavity=itm["glavity"]
