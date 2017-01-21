@@ -10,7 +10,6 @@ queue.on("complete", handleComplete, this);
 queue.loadManifest([
     {id: "space", src: 'assets/images/Space_view.jpg'}
     {id: "start", src: 'assets/images/start.png'}
-
 ]);
 
 var setting = {
@@ -76,6 +75,62 @@ function init(event) {
  */
 function handleComplete(event) {
     console.log("test",event);
+    var rocket = asset.createAssets(queue.getResult('rocket'), 259, 668);
+    stage.addChild(rocket);
+
+    var star = asset.createAssets(queue.getResult('star'), 259, 100);
+    stage.addChild(star);
+
+    var diff = 120;
+    var planet1 = asset.createAssets(queue.getResult('planet1'), 643, 668);
+    var planet2 = asset.createAssets(queue.getResult('planet2'), 643, 668 - diff);
+    var planet3 = asset.createAssets(queue.getResult('planet3'), 643, 668 - diff * 2);
+    var planet4 = asset.createAssets(queue.getResult('planet4'), 643, 668 - diff * 3);
+    var planet5 = asset.createAssets(queue.getResult('planet5'), 643, 668 - diff * 4);
+
+    stage.addChild(planet1);
+    stage.addChild(planet2);
+    stage.addChild(planet3);
+    stage.addChild(planet4);
+    stage.addChild(planet5);
+
+    planet1.on("pressmove", function(evt) {
+    evt.target.x = evt.stageX;
+    evt.target.y = evt.stageY;
+    });
+    planet1.on("pressup", function(evt) { console.log("up"); })
+
+    planet2.on("pressmove", function(evt) {
+    evt.target.x = evt.stageX;
+    evt.target.y = evt.stageY;
+    });
+    planet2.on("pressup", function(evt) { console.log("up"); })
+
+    planet3.on("pressmove", function(evt) {
+    evt.target.x = evt.stageX;
+    evt.target.y = evt.stageY;
+    });
+    planet5.on("pressup", function(evt) { console.log("up"); })
+
+    planet4.on("pressmove", function(evt) {
+    evt.target.x = evt.stageX;
+    evt.target.y = evt.stageY;
+    });
+    planet4.on("pressup", function(evt) { console.log("up"); })
+
+    planet5.on("pressmove", function(evt) {
+    evt.target.x = evt.stageX;
+    evt.target.y = evt.stageY;
+    });
+    planet5.on("pressup", function(evt) { console.log("up"); })
+
+    // createjs.Tween.get(star, { loop: true })
+    //     .to({ x: 400 }, 1000, createjs.Ease.getPowInOut(4))
+    //     .to({ alpha: 0, y: 175 }, 500, createjs.Ease.getPowInOut(2))
+    //     .to({ alpha: 0, y: 225 }, 100)
+    //     .to({ alpha: 1, y: 200 }, 500, createjs.Ease.getPowInOut(2))
+    //     .to({ x: 100 }, 800, createjs.Ease.getPowInOut(2));
+}
         var bitmap = new createjs.Bitmap(queue.getResult('space'));
 
     var start = asset.createAssets(queue.getResult('start'), 259, 576);
