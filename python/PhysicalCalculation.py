@@ -92,14 +92,14 @@ def getCaluculatedFrame(ship,starlist):
     for f in range(60):
         #print("--------------------------------------")
 
-        current_ship=Progolferhamon.StarShip(current_ship.x,current_ship.y,current_ship.speed,current_ship.drection)
+        current_ship=Progolferhamon.StarShip(current_ship.x,current_ship.y,current_ship.speed,current_ship.direction)
         current_ship_point_array = []
         current_ship_point_array.append(current_ship.x)
         current_ship_point_array.append(current_ship.y)
         current_ship_point_array = np.asarray(current_ship_point_array)
 
 
-        current_player_vector = getPlayerVector(current_ship.speed,current_ship.drection)
+        current_player_vector = getPlayerVector(current_ship.speed,current_ship.direction)
         #print("current_player_vector x %.10f" % current_player_vector[0])
         #print("current_player_vector y %.10f" % current_player_vector[1])
 
@@ -124,7 +124,7 @@ def getCaluculatedFrame(ship,starlist):
         current_ship.setData(next_ship_point[0],next_ship_point[1],next_ship_speed_deg[0],next_ship_speed_deg[1])
         #print("current_ship y ",current_ship.y)
         frame.append(current_ship)
-        #csv += str(f) + ", " + str(current_ship.x)  + ", " + str(current_ship.y) + ", " + str(current_ship.speed) + ", " + str(current_ship.drection) + "\n"
+        #csv += str(f) + ", " + str(current_ship.x)  + ", " + str(current_ship.y) + ", " + str(current_ship.speed) + ", " + str(current_ship.direction) + "\n"
       
     #with open("./test3.csv","wb") as w:
         #w.write(csv)
