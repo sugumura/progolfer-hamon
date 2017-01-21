@@ -7,3 +7,7 @@
 ```
 $ npm start
 ```
+
+
+BGM・効果音はスキップモアの物を使用しています。
+SKIPMORE：http://www.skipmore.com/

@@ -8,6 +8,7 @@ var queue = new createjs.LoadQueue();
 queue.installPlugin(createjs.Sound);
 queue.on("complete", handleComplete, this);
 
+//スコア変数 lisaco
 var score1 = new createjs.Text();
 var scoretxt;
 
@@ -19,8 +20,18 @@ queue.loadManifest([
     {id: "planet3", src: 'assets/images/planet3.png'},
     {id: "planet4", src: 'assets/images/planet4.png'},
     {id: "planet5", src: 'assets/images/planet5.png'},
-    {id: "space", src: 'assets/images/Space_view.jpg'}
+    {id: "space", src: 'assets/images/Space_view.jpg'},
+    //bgm 呼び出してるよ lisaco
+	{id: "bgm", src: 'assets/sounds/bgm.mp3'},
+	{id: "bgm_thinking", src: 'assets/sounds/bgm_thinking.mp3'},
+	{id: "se_rocket", src: 'assets/sounds/se_rocket.mp3'}
 ]);
+
+//queue.loadFile([
+//	{id: "bgm", src: 'assets/sounds/bgm.mp3'},
+//	{id: "bgm_thinking", src: 'assets/sounds/bgm_thinking.mp3'},
+//	{id: "se_rocket", src: 'assets/sounds/se_rocket.mp3'}
+//	]);
 
 var setting = {
     background: function () {
@@ -80,7 +91,6 @@ function init(event) {
     button.addEventListener("click", request);
     stage.addChild(button);
 
-
     createjs.Ticker.setFPS(30);
     createjs.Ticker.addEventListener('tick', function(e){
         // console.log(e);
@@ -108,15 +118,17 @@ function handleComplete(event) {
     var planet4 = asset.createAssets(queue.getResult('planet4'), 643, 668 - diff * 3);
     var planet5 = asset.createAssets(queue.getResult('planet5'), 643, 668 - diff * 4);
 
-	//スコア表示
-	score1.font = "bold 30px Dorsa";
+	//スコア表示 lisaco
+	score1.font = "bold 30px Impact";
 	score1.color = "#ff7000";
-	score1.text = "すこあ：" + ("0000" + scoretxt).slice(-4);
-	score1.x = 540;
+	score1.text = "score：" + ("0000" + scoretxt).slice(-4);
+	score1.x = 560;
 	score1.y = 50;	
 
-	stage.addChild(score1);
-
+	//初期びーじーえむ lisaco
+	var bgminstance = createjs.Sound.createInstance('bgm_thinking');
+	bgminstance.play('none', 0, 0, -1, 1, 0);
+	
     var bitmap = new createjs.Bitmap(queue.getResult('space'));
     
     stage.addChildAt(bitmap, 1);
@@ -131,39 +143,43 @@ function handleComplete(event) {
     planet1.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
-    AddScore();	//点数アップ関数！
+    AddScore();	//点数アップ関数！ lisaco
     });
     planet1.on("pressup", function(evt) { console.log("up"); })
 
     planet2.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
-    AddScore();	//点数アップ関数！
+    AddScore();	//点数アップ関数！ lisaco
     });
     planet2.on("pressup", function(evt) { console.log("up"); })
 
     planet3.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
-    AddScore();	//点数アップ関数！
+    AddScore();	//点数アップ関数！ lisaco
     });
     planet5.on("pressup", function(evt) { console.log("up"); })
 
     planet4.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
-    AddScore();	//点数アップ関数！
+    AddScore();	//点数アップ関数！ lisaco
     });
     planet4.on("pressup", function(evt) { console.log("up"); })
 
     planet5.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
-    AddScore();	//点数アップ関数！
+    AddScore();	//点数アップ関数！ lisaco
     });
     planet5.on("pressup", function(evt) { console.log("up"); })
-
-	score1.addEventListener("click", AddScore);
+    
+	rocket.on("click", function(evt) {
+    	bgminstance.stop();
+    	rocketClick();
+    });
+    
 }
 
 var frames = {
@@ -258,9 +274,6 @@ function request(event) {
 }
 
 /**
-<<<<<<< HEAD
- * 点数追加したいよ！
-=======
  * アンカーを中心にする
  * @param item
  * @returns {*}
@@ -272,10 +285,23 @@ function anchorCenter(item) {
 }
 
 /**
- * 点数追加したいねん
->>>>>>> 630cb6dac0fba7ad103dedade65182a724a9b682
+ * 点数追加したいねん lisaco
  */
 function AddScore() {
 	 scoretxt = scoretxt + 1;
-	score1.text = "すこあ：" + ("0000" + scoretxt).slice(-4);
+	score1.text = "score：" + ("0000" + scoretxt).slice(-4);
 }
+
+/**
+ * ロケットくりっく！ lisaco
+ */
+ function rocketClick(event){
+ 	//ロケット発射！
+ 	var rocketinstance = createjs.Sound.createInstance('se_rocket');
+	rocketinstance.play('none', 0, 0, 0, 1, 0);
+ 
+	//びーじーえむ
+	//var bgminstance = createjs.Sound.createInstance('bgm');
+	//bgminstance.play('none', 0, 0, 0, 1, 0);
+ }
+ 
