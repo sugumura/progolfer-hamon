@@ -1,5 +1,6 @@
 # coding: utf-8
-import PhysicalCalculation as py
+#import PhysicalCalculation as py
+import NoNumpy as py
 class ProgolferHamon:
     def __init__(self):
         self.__StarShip=None
