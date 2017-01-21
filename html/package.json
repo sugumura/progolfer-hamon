@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "axios": "^0.15.3",
     "createjs-easeljs": "^0.8.2",
     "createjs-preloadjs": "^0.6.3",
     "createjs-soundjs": "^0.6.2",

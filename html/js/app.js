@@ -44,6 +44,15 @@ var asset = {
         bitmap.x = x;
         bitmap.y = y;
         return bitmap;
+    },
+    createButton: function (label, width, height) {
+        var button = new createjs.Container();
+        var bg = new createjs.Shape();
+        bg.graphics.beginFill("White").drawRect(0, 0, width, height);
+        var text = new createjs.Text(label, "24px sans-serif", "#000000");
+        button.addChild(bg);
+        button.addChild(text);
+        return button;
     }
 };
 
@@ -61,6 +70,11 @@ function init(event) {
     var sidebar = setting.sidebar();
     stage.addChild(background);
     stage.addChild(sidebar);
+
+    var button = asset.createButton('Request', 100, 30);
+    button.addEventListener("click", request);
+    stage.addChild(button);
+
 
     createjs.Ticker.setFPS(30);
     createjs.Ticker.addEventListener('tick', function(e){
@@ -132,6 +146,43 @@ function handleComplete(event) {
         .to({ x: 100 }, 800, createjs.Ease.getPowInOut(2));
 }
 
+/**
+ * 通信開始
+ * @param event
+ */
+function request(event) {
+
+    axios.post('/test', {
+        starship: {
+            x : 100,
+            y : 100,
+            speed : 10,
+            direction : 45
+        },
+        stars :[
+            {
+                x : 10,
+                y : 20,
+                gravity : 5
+            },
+            {
+                x : 40,
+                y : 50,
+                gravity : 2
+            }
+        ],
+        stageinfo : {
+            id : 1,
+            name : "stage01"
+        }
+    })
+    .then(function (response) {
+        console.log(response);
+    })
+    .catch(function (error) {
+        console.error(error);
+    });
+}
 
 /**
  * アンカーを中心にする
