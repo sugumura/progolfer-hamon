@@ -1,12 +1,12 @@
 # coding: utf-8
-
+import base64
 import cgi
 import json
 import logging
 import logging.handlers
 import sys
 import Progolferhamon
-
+from cgi import parse_qs
 from wsgiref.simple_server import make_server
 
 
@@ -16,7 +16,7 @@ logger.setLevel(logging.INFO)
 
 # Handler 
 LOG_FILE = '/opt/python/log/hamonweb-app.log'
-#LOG_FILE = './hamonweb-app.log'
+# LOG_FILE = './hamonweb-app.log'
 handler = logging.handlers.RotatingFileHandler(LOG_FILE, maxBytes=1048576, backupCount=5)
 handler.setLevel(logging.INFO)
 
@@ -68,16 +68,39 @@ def application(environ, start_response):
 
                 #reqstr=(req[' name']).replace('request','')
                 #logger.info(reqstr)
-                post_env = environ.copy()
-                post_env['QUERY_STRING'] = ''
-                post = cgi.FieldStorage(fp=environ['wsgi.input'],environ=post_env,keep_blank_values=True)
 
-                reqstr=post.value
-                logger.info(reqstr)
+                try:
+                    request_body_size = int(environ.get('CONTENT_LENGTH', 0))
+                except (ValueError):
+                    request_body_size = 0
 
-                response=startgameservice(reqstr)
+                    # When the method is POST the variable will be sent
+                    # in the HTTP request body which is passed by the WSGI server
+                    # in the file like wsgi.input environment variable.
+                request_body = environ['wsgi.input'].read(request_body_size).decode('utf-8')
+                # d = parse_qs(request_body)
+                #
+                # logger.info(d)
+                # logger.info('test')
+                # logger.info('start parsing')
+                # post_env = environ.copy()
+                # logger.info('start parsing2')
+                # post_env['QUERY_STRING'] = ''
+                # logger.info('start parsing3')
+                # logger.info(environ['wsgi.input'])
+                # post = cgi.FieldStorage(fp=environ['wsgi.input'],environ=post_env,keep_blank_values=True)
+                # logger.info('start parsing4')
+                # reqstr=post.value
+                # logger.info(reqstr)
+
+                response=startgameservice(request_body)
                 logger.info("--Response Data 1")
                 logger.info(response)
+                status = '200 OK'
+                headers = [('Content-type', 'application/json')]
+                start_response(status, headers)
+                logger.info('return response')
+                return [response.encode('utf-8')]
 
         except (TypeError, ValueError):
             logger.warning('Error retrieving request body for async work.')
