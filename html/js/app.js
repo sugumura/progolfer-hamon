@@ -16,8 +16,8 @@ queue.loadManifest([
     {id: "planet2", src: 'assets/images/planet2.png'},
     {id: "planet3", src: 'assets/images/planet3.png'},
     {id: "planet4", src: 'assets/images/planet4.png'},
-    {id: "planet5", src: 'assets/images/planet5.png'}
-
+    {id: "planet5", src: 'assets/images/planet5.png'},
+    {id: "space", src: 'assets/images/Space_view.jpg'}
 ]);
 
 var setting = {
@@ -46,6 +46,15 @@ var asset = {
         bitmap.x = x;
         bitmap.y = y;
         return bitmap;
+    },
+    createButton: function (label, width, height) {
+        var button = new createjs.Container();
+        var bg = new createjs.Shape();
+        bg.graphics.beginFill("White").drawRect(0, 0, width, height);
+        var text = new createjs.Text(label, "24px sans-serif", "#000000");
+        button.addChild(bg);
+        button.addChild(text);
+        return button;
     }
 };
 
@@ -64,6 +73,11 @@ function init(event) {
     var sidebar = setting.sidebar();
     stage.addChild(background);
     stage.addChild(sidebar);
+
+    var button = asset.createButton('Request', 100, 30);
+    button.addEventListener("click", request);
+    stage.addChild(button);
+
 
     createjs.Ticker.setFPS(30);
     createjs.Ticker.addEventListener('tick', function(e){
@@ -84,6 +98,7 @@ function handleComplete(event) {
     var star = asset.createAssets(queue.getResult('star'), 259, 100);
     stage.addChild(star);
 
+ 
     var diff = 120;
     var planet1 = asset.createAssets(queue.getResult('planet1'), 643, 668);
     var planet2 = asset.createAssets(queue.getResult('planet2'), 643, 668 - diff);
@@ -99,6 +114,13 @@ function handleComplete(event) {
 	score1.y = 50;	
 
 	stage.addChild(score1);
+
+　  var bitmap = new createjs.Bitmap(queue.getResult('space'));
+    // アンカーを左上にする
+    // bitmap.x = 0;
+    // bitmap.y = 0;
+    
+    stage.addChild(bitmap);
 
     stage.addChild(planet1);
     stage.addChild(planet2);
@@ -147,6 +169,43 @@ function handleComplete(event) {
 
 }
 
+/**
+ * 通信開始
+ * @param event
+ */
+function request(event) {
+
+    axios.post('/test', {
+        starship: {
+            x : 100,
+            y : 100,
+            speed : 10,
+            direction : 45
+        },
+        stars :[
+            {
+                x : 10,
+                y : 20,
+                gravity : 5
+            },
+            {
+                x : 40,
+                y : 50,
+                gravity : 2
+            }
+        ],
+        stageinfo : {
+            id : 1,
+            name : "stage01"
+        }
+    })
+    .then(function (response) {
+        console.log(response);
+    })
+    .catch(function (error) {
+        console.error(error);
+    });
+}
 
 /**
  * アンカーを中心にする
