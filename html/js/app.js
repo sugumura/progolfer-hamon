@@ -7,6 +7,8 @@ var queue = new createjs.LoadQueue();
 queue.installPlugin(createjs.Sound);
 queue.on("complete", handleComplete, this);
 
+var scoretxt;
+
 queue.loadManifest([
     {id: "rocket", src: 'assets/images/rocket.png'},
     {id: "star", src: 'assets/images/star.png'},
@@ -15,7 +17,7 @@ queue.loadManifest([
     {id: "planet3", src: 'assets/images/planet3.png'},
     {id: "planet4", src: 'assets/images/planet4.png'},
     {id: "planet5", src: 'assets/images/planet5.png'},
-
+    {id: "space", src: 'assets/images/Space_view.jpg'}
 ]);
 
 var setting = {
@@ -44,6 +46,15 @@ var asset = {
         bitmap.x = x;
         bitmap.y = y;
         return bitmap;
+    },
+    createButton: function (label, width, height) {
+        var button = new createjs.Container();
+        var bg = new createjs.Shape();
+        bg.graphics.beginFill("White").drawRect(0, 0, width, height);
+        var text = new createjs.Text(label, "24px sans-serif", "#000000");
+        button.addChild(bg);
+        button.addChild(text);
+        return button;
     }
 };
 
@@ -56,11 +67,17 @@ function init(event) {
 
     console.log('DOMContentLoaded', event);
     stage = new createjs.Stage("GameWindow");
+    scoretxt = 0;
 
     var background = setting.background();
     var sidebar = setting.sidebar();
     stage.addChild(background);
     stage.addChild(sidebar);
+
+    var button = asset.createButton('Request', 100, 30);
+    button.addEventListener("click", request);
+    stage.addChild(button);
+
 
     createjs.Ticker.setFPS(30);
     createjs.Ticker.addEventListener('tick', function(e){
@@ -81,6 +98,7 @@ function handleComplete(event) {
     var star = asset.createAssets(queue.getResult('star'), 259, 100);
     stage.addChild(star);
 
+ 
     var diff = 120;
     var planet1 = asset.createAssets(queue.getResult('planet1'), 643, 668);
     var planet2 = asset.createAssets(queue.getResult('planet2'), 643, 668 - diff);
@@ -88,6 +106,22 @@ function handleComplete(event) {
     var planet4 = asset.createAssets(queue.getResult('planet4'), 643, 668 - diff * 3);
     var planet5 = asset.createAssets(queue.getResult('planet5'), 643, 668 - diff * 4);
 
+	var score1 = new createjs.Text();
+	score1.font = "bold 30px Dorsa";
+	score1.color = "#ff7000";
+	score1.text = "すこあ：" + ("0000" + scoretxt).slice(-4);
+	score1.x = 540;
+	score1.y = 50;	
+
+	stage.addChild(score1);
+
+　  var bitmap = new createjs.Bitmap(queue.getResult('space'));
+    // アンカーを左上にする
+    // bitmap.x = 0;
+    // bitmap.y = 0;
+    
+    stage.addChildAt(bitmap, 1);
+    
     stage.addChild(planet1);
     stage.addChild(planet2);
     stage.addChild(planet3);
@@ -130,8 +164,48 @@ function handleComplete(event) {
         .to({ alpha: 0, y: 225 }, 100)
         .to({ alpha: 1, y: 200 }, 500, createjs.Ease.getPowInOut(2))
         .to({ x: 100 }, 800, createjs.Ease.getPowInOut(2));
+
+	score1.addEventListener("click", AddScore);
+
 }
 
+/**
+ * 通信開始
+ * @param event
+ */
+function request(event) {
+
+    axios.post('/test', {
+        starship: {
+            x : 100,
+            y : 100,
+            speed : 10,
+            direction : 45
+        },
+        stars :[
+            {
+                x : 10,
+                y : 20,
+                gravity : 5
+            },
+            {
+                x : 40,
+                y : 50,
+                gravity : 2
+            }
+        ],
+        stageinfo : {
+            id : 1,
+            name : "stage01"
+        }
+    })
+    .then(function (response) {
+        console.log(response);
+    })
+    .catch(function (error) {
+        console.error(error);
+    });
+}
 
 /**
  * アンカーを中心にする
@@ -143,3 +217,10 @@ function anchorCenter(item) {
     item.regY = item.getBounds().height / 2;
     return item;
 }
+
+/**
+ * 点数追加したいよ！
+ */
+ function AddScore(event){
+ 	scoretxt = scoretxt + 1;
+ }
