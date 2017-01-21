@@ -120,8 +120,8 @@ function handleComplete(event) {
     // bitmap.x = 0;
     // bitmap.y = 0;
     
-    stage.addChild(bitmap);
-
+    stage.addChildAt(bitmap, 1);
+    
     stage.addChild(planet1);
     stage.addChild(planet2);
     stage.addChild(planet3);

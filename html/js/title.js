@@ -8,8 +8,15 @@ queue.installPlugin(createjs.Sound);
 queue.on("complete", handleComplete, this);
 
 queue.loadManifest([
+<<<<<<< HEAD
+    {id: "rocket", src: 'assets/images/rocket.png'},
+    {id: "star", src: 'assets/images/star.png'},
+    {id: "planet1", src: 'assets/images/planet1.png'},
+    {id: "planet2", src: 'assets/images/planet2.png'},
+    {id: "planet3", src: 'assets/images/planet3.png'},
+    {id: "planet4", src: 'assets/images/planet4.png'},
+    {id: "planet5", src: 'assets/images/planet5.png'},
     {id: "space", src: 'assets/images/Space_view.jpg'}
-
 ]);
 
 var setting = {
@@ -73,10 +80,69 @@ function init(event) {
  */
 function handleComplete(event) {
     console.log("test",event);
+<<<<<<< HEAD
+    var rocket = asset.createAssets(queue.getResult('rocket'), 259, 668);
+    stage.addChild(rocket);
+
+    var star = asset.createAssets(queue.getResult('star'), 259, 100);
+    stage.addChild(star);
+
+    var diff = 120;
+    var planet1 = asset.createAssets(queue.getResult('planet1'), 643, 668);
+    var planet2 = asset.createAssets(queue.getResult('planet2'), 643, 668 - diff);
+    var planet3 = asset.createAssets(queue.getResult('planet3'), 643, 668 - diff * 2);
+    var planet4 = asset.createAssets(queue.getResult('planet4'), 643, 668 - diff * 3);
+    var planet5 = asset.createAssets(queue.getResult('planet5'), 643, 668 - diff * 4);
+
+    stage.addChild(planet1);
+    stage.addChild(planet2);
+    stage.addChild(planet3);
+    stage.addChild(planet4);
+    stage.addChild(planet5);
+
+    planet1.on("pressmove", function(evt) {
+    evt.target.x = evt.stageX;
+    evt.target.y = evt.stageY;
+    });
+    planet1.on("pressup", function(evt) { console.log("up"); })
+
+    planet2.on("pressmove", function(evt) {
+    evt.target.x = evt.stageX;
+    evt.target.y = evt.stageY;
+    });
+    planet2.on("pressup", function(evt) { console.log("up"); })
+
+    planet3.on("pressmove", function(evt) {
+    evt.target.x = evt.stageX;
+    evt.target.y = evt.stageY;
+    });
+    planet5.on("pressup", function(evt) { console.log("up"); })
+
+    planet4.on("pressmove", function(evt) {
+    evt.target.x = evt.stageX;
+    evt.target.y = evt.stageY;
+    });
+    planet4.on("pressup", function(evt) { console.log("up"); })
+
+    planet5.on("pressmove", function(evt) {
+    evt.target.x = evt.stageX;
+    evt.target.y = evt.stageY;
+    });
+    planet5.on("pressup", function(evt) { console.log("up"); })
+
+    // createjs.Tween.get(star, { loop: true })
+    //     .to({ x: 400 }, 1000, createjs.Ease.getPowInOut(4))
+    //     .to({ alpha: 0, y: 175 }, 500, createjs.Ease.getPowInOut(2))
+    //     .to({ alpha: 0, y: 225 }, 100)
+    //     .to({ alpha: 1, y: 200 }, 500, createjs.Ease.getPowInOut(2))
+    //     .to({ x: 100 }, 800, createjs.Ease.getPowInOut(2));
+}
+=======
         var bitmap = new createjs.Bitmap(queue.getResult('space'));
         // アンカーを中心にする
         bitmap.x = 0;
         bitmap.y = 0;
+>>>>>>> 2cc58b8e8fed2eb8c7965a97b8be13e36ed8a07e
 
     stage.addChild(bitmap);
 
