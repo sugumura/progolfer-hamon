@@ -14,7 +14,7 @@ queue.loadManifest([
     {id: "planet2", src: 'assets/images/planet2.png'},
     {id: "planet3", src: 'assets/images/planet3.png'},
     {id: "planet4", src: 'assets/images/planet4.png'},
-    {id: "planet5", src: 'assets/images/planet5.png'}
+    {id: "planet5", src: 'assets/images/planet5.png'},
 
 ]);
 
@@ -93,6 +93,36 @@ function handleComplete(event) {
     stage.addChild(planet3);
     stage.addChild(planet4);
     stage.addChild(planet5);
+
+    planet1.on("pressmove", function(evt) {
+    evt.target.x = evt.stageX;
+    evt.target.y = evt.stageY;
+    });
+    planet1.on("pressup", function(evt) { console.log("up"); })
+
+    planet2.on("pressmove", function(evt) {
+    evt.target.x = evt.stageX;
+    evt.target.y = evt.stageY;
+    });
+    planet2.on("pressup", function(evt) { console.log("up"); })
+
+    planet3.on("pressmove", function(evt) {
+    evt.target.x = evt.stageX;
+    evt.target.y = evt.stageY;
+    });
+    planet5.on("pressup", function(evt) { console.log("up"); })
+
+    planet4.on("pressmove", function(evt) {
+    evt.target.x = evt.stageX;
+    evt.target.y = evt.stageY;
+    });
+    planet4.on("pressup", function(evt) { console.log("up"); })
+
+    planet5.on("pressmove", function(evt) {
+    evt.target.x = evt.stageX;
+    evt.target.y = evt.stageY;
+    });
+    planet5.on("pressup", function(evt) { console.log("up"); })
 
     // createjs.Tween.get(star, { loop: true })
     //     .to({ x: 400 }, 1000, createjs.Ease.getPowInOut(4))
