@@ -7,6 +7,8 @@ var queue = new createjs.LoadQueue();
 queue.installPlugin(createjs.Sound);
 queue.on("complete", handleComplete, this);
 
+var scoretxt;
+
 queue.loadManifest([
     {id: "rocket", src: 'assets/images/rocket.png'},
     {id: "star", src: 'assets/images/star.png'},
@@ -56,6 +58,7 @@ function init(event) {
 
     console.log('DOMContentLoaded', event);
     stage = new createjs.Stage("GameWindow");
+    scoretxt = 0;
 
     var background = setting.background();
     var sidebar = setting.sidebar();
@@ -87,6 +90,15 @@ function handleComplete(event) {
     var planet3 = asset.createAssets(queue.getResult('planet3'), 643, 668 - diff * 2);
     var planet4 = asset.createAssets(queue.getResult('planet4'), 643, 668 - diff * 3);
     var planet5 = asset.createAssets(queue.getResult('planet5'), 643, 668 - diff * 4);
+
+	var score1 = new createjs.Text();
+	score1.font = "bold 30px Dorsa";
+	score1.color = "#ff7000";
+	score1.text = "すこあ：" + ("0000" + scoretxt).slice(-4);
+	score1.x = 540;
+	score1.y = 50;	
+
+	stage.addChild(score1);
 
     stage.addChild(planet1);
     stage.addChild(planet2);
@@ -130,6 +142,9 @@ function handleComplete(event) {
         .to({ alpha: 0, y: 225 }, 100)
         .to({ alpha: 1, y: 200 }, 500, createjs.Ease.getPowInOut(2))
         .to({ x: 100 }, 800, createjs.Ease.getPowInOut(2));
+
+	score1.addEventListener("click", AddScore);
+
 }
 
 
@@ -143,3 +158,10 @@ function anchorCenter(item) {
     item.regY = item.getBounds().height / 2;
     return item;
 }
+
+/**
+ * 点数追加したいよ！
+ */
+ function AddScore(event){
+ 	scoretxt = scoretxt + 1;
+ }
