@@ -8,6 +8,7 @@ queue.installPlugin(createjs.Sound);
 queue.on("complete", handleComplete, this);
 
 queue.loadManifest([
+<<<<<<< HEAD
 
     {id: "rocket", src: 'assets/images/rocket.png'},
     {id: "star", src: 'assets/images/star.png'},
@@ -18,6 +19,10 @@ queue.loadManifest([
     {id: "planet5", src: 'assets/images/planet5.png'},
     {id: "space", src: 'assets/images/Space_view.jpg'},
     {id: "start", src: 'assets/images/start.png'},
+=======
+    {id: "space", src: 'assets/images/Space_view.jpg'},
+    {id: "start", src: 'assets/images/start.png'}
+>>>>>>> ebfec6cf679b47432398a4821b00f88bb29c7168
 ]);
 
 var setting = {
@@ -65,6 +70,8 @@ function init(event) {
     console.log('DOMContentLoaded', event);
     stage = new createjs.Stage("GameWindow");
 
+    // window.location.href = 'パス名'; // 通常の遷移
+    // window.open('パス名', '_blank'); // 新しいタブを開き、ページを表示
     var sidebar = setting.sidebar();
     stage.addChild(sidebar);
 
@@ -81,6 +88,7 @@ function init(event) {
  */
 function handleComplete(event) {
     console.log("test",event);
+<<<<<<< HEAD
 
     var rocket = asset.createAssets(queue.getResult('rocket'), 259, 668);
     stage.addChild(rocket);
@@ -106,13 +114,14 @@ function handleComplete(event) {
     evt.target.y = evt.stageY;
     });
     planet1.on("pressup", function(evt) { console.log("up"); })
+=======
+   
+    var bitmap = new createjs.Bitmap(queue.getResult('space'));
+>>>>>>> ebfec6cf679b47432398a4821b00f88bb29c7168
 
-    planet2.on("pressmove", function(evt) {
-    evt.target.x = evt.stageX;
-    evt.target.y = evt.stageY;
-    });
-    planet2.on("pressup", function(evt) { console.log("up"); })
+    var start = asset.createAssets(queue.getResult('start'), 259, 576);
 
+<<<<<<< HEAD
     planet3.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
@@ -146,5 +155,12 @@ function handleComplete(event) {
 
 
     stage.addChild(bitmap);
+=======
+        // アンカーを中心にする
+        bitmap.x = 0;
+        bitmap.y = 0;
+>>>>>>> ebfec6cf679b47432398a4821b00f88bb29c7168
 
+    stage.addChildAt(bitmap, 1);
+    stage.addChild(start);
  }
