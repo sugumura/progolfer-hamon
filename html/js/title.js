@@ -10,6 +10,8 @@ queue.on("complete", handleComplete, this);
 queue.loadManifest([
     {id: "space", src: 'assets/images/Space_view.jpg'},
     {id: "titlelogo", src: 'assets/images/Titlelogo.png'},
+    //bgm 呼び出してるよ lisaco
+	{id: "bgm_title", src: 'assets/sounds/bgm_title.mp3'}
 ]);
 
 var setting = {
@@ -63,6 +65,9 @@ function handleComplete(event) {
     var titlelogo = asset.createAssets(queue.getResult('titlelogo'), 259, 192);    
     var bitmap = new createjs.Bitmap(queue.getResult('space'));
     
+     //初期びーじーえむ lisaco
+	var bgminstance = createjs.Sound.createInstance('bgm_title');
+	bgminstance.play('none', 0, 0, -1, 0.5, 0);   
 
         // アンカーを中心にする
         bitmap.x = 0;
@@ -71,4 +76,5 @@ function handleComplete(event) {
     stage.addChildAt(bitmap, 1);
     stage.addChild(start);
     stage.addChild(titlelogo);
+    
  }
