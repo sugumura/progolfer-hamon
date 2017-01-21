@@ -8,6 +8,7 @@ var queue = new createjs.LoadQueue();
 queue.installPlugin(createjs.Sound);
 queue.on("complete", handleComplete, this);
 
+var score1 = new createjs.Text();
 var scoretxt;
 
 queue.loadManifest([
@@ -107,7 +108,7 @@ function handleComplete(event) {
     var planet4 = asset.createAssets(queue.getResult('planet4'), 643, 668 - diff * 3);
     var planet5 = asset.createAssets(queue.getResult('planet5'), 643, 668 - diff * 4);
 
-	var score1 = new createjs.Text();
+	//スコア表示
 	score1.font = "bold 30px Dorsa";
 	score1.color = "#ff7000";
 	score1.text = "すこあ：" + ("0000" + scoretxt).slice(-4);
@@ -117,9 +118,6 @@ function handleComplete(event) {
 	stage.addChild(score1);
 
     var bitmap = new createjs.Bitmap(queue.getResult('space'));
-    // アンカーを左上にする
-    // bitmap.x = 0;
-    // bitmap.y = 0;
     
     stage.addChildAt(bitmap, 1);
     
@@ -128,34 +126,40 @@ function handleComplete(event) {
     stage.addChild(planet3);
     stage.addChild(planet4);
     stage.addChild(planet5);
+	stage.addChild(score1);
 
     planet1.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
+    AddScore();	//点数アップ関数！
     });
     planet1.on("pressup", function(evt) { console.log("up"); })
 
     planet2.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
+    AddScore();	//点数アップ関数！
     });
     planet2.on("pressup", function(evt) { console.log("up"); })
 
     planet3.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
+    AddScore();	//点数アップ関数！
     });
     planet5.on("pressup", function(evt) { console.log("up"); })
 
     planet4.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
+    AddScore();	//点数アップ関数！
     });
     planet4.on("pressup", function(evt) { console.log("up"); })
 
     planet5.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
+    AddScore();	//点数アップ関数！
     });
     planet5.on("pressup", function(evt) { console.log("up"); })
 
@@ -214,6 +218,7 @@ function onOneSecond(e) {
     console.log('onOnSecond', e.target.x, e.target.y);
 }
 
+
 /**
  * 通信開始
  * @param event
@@ -253,8 +258,24 @@ function request(event) {
 }
 
 /**
+<<<<<<< HEAD
  * 点数追加したいよ！
+=======
+ * アンカーを中心にする
+ * @param item
+ * @returns {*}
  */
- function AddScore(event){
- 	scoretxt = scoretxt + 1;
- }
+function anchorCenter(item) {
+    item.regX = item.getBounds().width / 2;
+    item.regY = item.getBounds().height / 2;
+    return item;
+}
+
+/**
+ * 点数追加したいねん
+>>>>>>> 630cb6dac0fba7ad103dedade65182a724a9b682
+ */
+function AddScore() {
+	 scoretxt = scoretxt + 1;
+	score1.text = "すこあ：" + ("0000" + scoretxt).slice(-4);
+}
