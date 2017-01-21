@@ -74,7 +74,6 @@ function handleComplete(event) {
         bitmap.y = 0;
 
     stage.addChildAt(bitmap, 1);
-    stage.addChild(start);
     stage.addChild(titlelogo);
     
  }
