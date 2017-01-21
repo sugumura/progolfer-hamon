@@ -57,7 +57,7 @@ def application(environ, start_response):
                 logger.info("Received task %s scheduled at %s", environ['HTTP_X_AWS_SQSD_TASKNAME'], environ['HTTP_X_AWS_SQSD_SCHEDULED_AT'])
             elif path == '/startgame':
                 logger.info("Start Game!!")
-                
+
                 #wsgi_input = environ['wsgi.input']
                 #length = int(environ.get('CONTENT_LENGTH', 0))
                 #req = dict(cgi.parse_qsl(wsgi_input.read(length).decode()))
@@ -71,7 +71,8 @@ def application(environ, start_response):
                 post_env = environ.copy()
                 post_env['QUERY_STRING'] = ''
                 post = cgi.FieldStorage(fp=environ['wsgi.input'],environ=post_env,keep_blank_values=True)
-                reqstr=post['request'].value
+
+                reqstr=post.value
                 logger.info(reqstr)
 
                 response=startgameservice(reqstr)
@@ -88,8 +89,9 @@ def application(environ, start_response):
         status = '200 OK'
         headers = [('Content-type', 'text/html')]
 
+    logger.info('create response')
     start_response(status, headers)
-    return [response]
+    return response
 
 def startgameservice(reqstr):
     logger.info("--Parse JSON")
@@ -112,7 +114,7 @@ def startgameservice(reqstr):
         star=Progolferhamon.Star(259,68,0.1)
         star.x=itm["x"]
         star.y=itm["y"]
-        star.grabity=itm["grabity"]
+        star.grabity=itm["gravity"]
         model.Stars.append(star)
 
     logger.info("--Create Position")
@@ -124,7 +126,7 @@ def startgameservice(reqstr):
         if(resstr=="") :
             resstr='{ "frames" : ['
         else:
-            resstr=resstr + "],["
+            resstr=resstr + ","
         resstr=resstr + itm.getJson()
 
     resstr=resstr + "]}"

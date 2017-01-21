@@ -4,8 +4,8 @@ import Progolferhamon
 
 def getPlayerVector(spd,deg):
     player_vector=[]
-    player_vector.append(spd*math.cos(math.radians(deg)))
-    player_vector.append(spd*math.sin(math.radians(deg)))
+    player_vector.append(float(spd)*math.cos(math.radians(float(deg))))
+    player_vector.append(float(spd)*math.sin(math.radians(float(deg))))
     #player_vector = np.asarray(player_vector)
     return player_vector
 
@@ -25,7 +25,7 @@ def getCalculatedStarVectorToPlayer(ppoint,star):
         deg *= 180/math.pi
         #print("deg",deg)
         if (deg < 0.0 and deg > -180.0):
-            deg += 360 
+            deg += 360
             #print(deg)
         stars_degree.append(deg)
         stars_vector.append([(stars_scholar[num]*math.cos(math.radians(stars_degree[num]))),(stars_scholar[num]*math.sin(math.radians(stars_degree[num])))])
@@ -40,7 +40,7 @@ def speeddeg(x_2 , y_2 , x ,y):
     data = []
     deg = 0
     speed = math.sqrt((x_2)**2 + (y_2)**2 )
-    
+
     dx = (x_2 -x)
     dy = (y_2 - y)
 
@@ -48,7 +48,7 @@ def speeddeg(x_2 , y_2 , x ,y):
     deg *= 180/math.pi
     #print(deg)
     if (deg < 0 and deg > -180):
-        deg += 360 
+        deg += 360
 	#else if (deg )
     data.append(speed)
     data.append(deg)
@@ -93,7 +93,7 @@ def getCaluculatedFrame(ship,starlist):
     for i in range(len(starlist)):
         stars.append([starlist[i].x,starlist[i].y,starlist[i].grabity])
     #stars = np.asarray(stars)
-    
+
     current_ship = ship
     frame=[]
 
@@ -121,7 +121,7 @@ def getCaluculatedFrame(ship,starlist):
         #print("sum_vector x %.10f" % sum_vector[1])
 
         next_ship_speed_deg = speeddeg(sum_vector[0],sum_vector[1],current_player_vector[0],current_player_vector[1])
-        
+
         next_ship_point = calculatePlayerNextPoint(current_ship.x,current_ship.y,sum_vector)
 
        # print("next_speed %.10f"%next_ship_speed_deg[0])
@@ -133,7 +133,7 @@ def getCaluculatedFrame(ship,starlist):
         #print("current_ship y ",current_ship.y)
         frame.append(current_ship)
         #csv += str(f) + ", " + str(current_ship.x)  + ", " + str(current_ship.y) + ", " + str(current_ship.speed) + ", " + str(current_ship.direction) + "\n"
-      
+
     #with open("./test3.csv","wb") as w:
         #w.write(csv)
     return frame
