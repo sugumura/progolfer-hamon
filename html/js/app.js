@@ -3,11 +3,12 @@
 document.addEventListener("DOMContentLoaded", init);
 
 var stage;
-var rocket;
+
 var queue = new createjs.LoadQueue();
 queue.installPlugin(createjs.Sound);
 queue.on("complete", handleComplete, this);
 
+//スコア変数 lisaco
 var score1 = new createjs.Text();
 var scoretxt;
 
@@ -19,8 +20,18 @@ queue.loadManifest([
     {id: "planet3", src: 'assets/images/planet3.png'},
     {id: "planet4", src: 'assets/images/planet4.png'},
     {id: "planet5", src: 'assets/images/planet5.png'},
-    {id: "space", src: 'assets/images/Space_view.jpg'}
+    {id: "space", src: 'assets/images/Space_view.jpg'},
+    //bgm 呼び出してるよ lisaco
+	{id: "bgm", src: 'assets/sounds/bgm.mp3'},
+	{id: "bgm_thinking", src: 'assets/sounds/bgm_thinking.mp3'},
+	{id: "se_rocket", src: 'assets/sounds/se_rocket.mp3'}
 ]);
+
+//queue.loadFile([
+//	{id: "bgm", src: 'assets/sounds/bgm.mp3'},
+//	{id: "bgm_thinking", src: 'assets/sounds/bgm_thinking.mp3'},
+//	{id: "se_rocket", src: 'assets/sounds/se_rocket.mp3'}
+//	]);
 
 var setting = {
     background: function () {
@@ -36,6 +47,48 @@ var setting = {
         side.x = 0;
         side.y = 0;
         return side;
+    }
+};
+
+/**
+ * ゲームオブジェクトの初期情報
+ */
+var game = {
+    rocket: {
+        name: 'rocket',
+        x: 259,
+        y: 668,
+        rotation: 0
+    },
+    star: {
+        name: 'star',
+        x: 259,
+        y: 100
+    },
+    planet1: {
+        name: 'planet1',
+        x: 643,
+        y: 668
+    },
+    planet2: {
+        name: 'planet2',
+        x: 643,
+        y: 668 - 120
+    },
+    planet3: {
+        name: 'planet3',
+        x: 643,
+        y: 668 - 120 * 2
+    },
+    planet4: {
+        name: 'planet4',
+        x: 643,
+        y: 668 - 120 * 3
+    },
+    planet5: {
+        name: 'planet5',
+        x: 643,
+        y: 668 - 120 * 4
     }
 };
 
@@ -76,10 +129,14 @@ function init(event) {
     stage.addChild(background);
     stage.addChild(sidebar);
 
-    var button = asset.createButton('Request', 100, 30);
+    var button = asset.createButton('開始', 100, 30);
     button.addEventListener("click", request);
     stage.addChild(button);
 
+    var reset = asset.createButton('リセット', 100, 30);
+    reset.y = 40;
+    reset.addEventListener("click", resetAll);
+    stage.addChild(reset);
 
     createjs.Ticker.setFPS(30);
     createjs.Ticker.addEventListener('tick', function(e){
@@ -89,34 +146,55 @@ function init(event) {
 }
 
 /**
+ * 最初の状態に戻す
+ */
+function resetAll() {
+    var rocket = stage.getChildByName(game.rocket.name);
+    var star = stage.getChildByName(game.star.name);
+    var planet1 = stage.getChildByName(game.planet1.name);
+    var planet2 = stage.getChildByName(game.planet2.name);
+    var planet3 = stage.getChildByName(game.planet3.name);
+    var planet4 = stage.getChildByName(game.planet4.name);
+    var planet5 = stage.getChildByName(game.planet5.name);
+}
+
+/**
  * リソース読み込み完了時
  * @param event
  */
 function handleComplete(event) {
-    console.log("test",event);
-    rocket = asset.createAssets(queue.getResult('rocket'), 259, 668);
+    console.log(event);
+    var rocket = asset.createAssets(queue.getResult('rocket'), game.rocket.x, game.rocket.y);
+    rocket.name = game.rocket.name;
     stage.addChild(rocket);
 
-    var star = asset.createAssets(queue.getResult('star'), 259, 100);
+    var star = asset.createAssets(queue.getResult('star'), game.star.x, game.star.y);
+    star.name = game.star.name;
     stage.addChild(star);
 
- 
-    var diff = 120;
-    var planet1 = asset.createAssets(queue.getResult('planet1'), 643, 668);
-    var planet2 = asset.createAssets(queue.getResult('planet2'), 643, 668 - diff);
-    var planet3 = asset.createAssets(queue.getResult('planet3'), 643, 668 - diff * 2);
-    var planet4 = asset.createAssets(queue.getResult('planet4'), 643, 668 - diff * 3);
-    var planet5 = asset.createAssets(queue.getResult('planet5'), 643, 668 - diff * 4);
+    var planet1 = asset.createAssets(queue.getResult('planet1'), game.planet1.x, game.planet1.y);
+    var planet2 = asset.createAssets(queue.getResult('planet2'), game.planet2.x, game.planet2.y);
+    var planet3 = asset.createAssets(queue.getResult('planet3'), game.planet3.x, game.planet3.y);
+    var planet4 = asset.createAssets(queue.getResult('planet4'), game.planet4.x, game.planet4.y);
+    var planet5 = asset.createAssets(queue.getResult('planet5'), game.planet5.x, game.planet5.y);
 
-	//スコア表示
-	score1.font = "bold 30px Dorsa";
+    planet1.name = game.planet1.name;
+    planet2.name = game.planet2.name;
+    planet3.name = game.planet3.name;
+    planet4.name = game.planet4.name;
+    planet5.name = game.planet5.name;
+
+	//スコア表示 lisaco
+	score1.font = "bold 30px Impact";
 	score1.color = "#ff7000";
-	score1.text = "すこあ：" + ("0000" + scoretxt).slice(-4);
-	score1.x = 540;
+	score1.text = "score：" + ("0000" + scoretxt).slice(-4);
+	score1.x = 560;
 	score1.y = 50;	
 
-	stage.addChild(score1);
-
+	//初期びーじーえむ lisaco
+	var bgminstance = createjs.Sound.createInstance('bgm_thinking');
+	bgminstance.play('none', 0, 0, -1, 1, 0);
+	
     var bitmap = new createjs.Bitmap(queue.getResult('space'));
     
     stage.addChildAt(bitmap, 1);
@@ -131,39 +209,43 @@ function handleComplete(event) {
     planet1.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
-    AddScore();	//点数アップ関数！
+    AddScore();	//点数アップ関数！ lisaco
     });
     planet1.on("pressup", function(evt) { console.log("up"); })
 
     planet2.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
-    AddScore();	//点数アップ関数！
+    AddScore();	//点数アップ関数！ lisaco
     });
     planet2.on("pressup", function(evt) { console.log("up"); })
 
     planet3.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
-    AddScore();	//点数アップ関数！
+    AddScore();	//点数アップ関数！ lisaco
     });
     planet5.on("pressup", function(evt) { console.log("up"); })
 
     planet4.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
-    AddScore();	//点数アップ関数！
+    AddScore();	//点数アップ関数！ lisaco
     });
     planet4.on("pressup", function(evt) { console.log("up"); })
 
     planet5.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
-    AddScore();	//点数アップ関数！
+    AddScore();	//点数アップ関数！ lisaco
     });
     planet5.on("pressup", function(evt) { console.log("up"); })
-
-	score1.addEventListener("click", AddScore);
+    
+	rocket.on("click", function(evt) {
+    	bgminstance.stop();
+    	rocketClick();
+    });
+    
 }
 
 var frames = {
@@ -196,17 +278,13 @@ var frames = {
 };
 
 function tweenTest() {
+    var rocket = stage.getChildByName(game.rocket.name);
     var tween = createjs.Tween.get(rocket, { loop: false });
     for (var i = 0, len = frames.frames.length; i < len; i++) {
         var item = frames.frames[i];
         tween.to({x: item.x, y: item.y, rotation: item.direction}, 1000)
             .call(onOneSecond);
     }
-        // .to({ x: 400 }, 1000, createjs.Ease.getPowInOut(4))
-        // .to({ alpha: 0, y: 175 }, 500, createjs.Ease.getPowInOut(2))
-        // .to({ alpha: 0, y: 225 }, 100)
-        // .to({ alpha: 1, y: 200 }, 500, createjs.Ease.getPowInOut(2))
-        // .to({ x: 100 }, 800, createjs.Ease.getPowInOut(2));
 }
 
 /**
@@ -258,24 +336,22 @@ function request(event) {
 }
 
 /**
-<<<<<<< HEAD
- * 点数追加したいよ！
-=======
- * アンカーを中心にする
- * @param item
- * @returns {*}
- */
-function anchorCenter(item) {
-    item.regX = item.getBounds().width / 2;
-    item.regY = item.getBounds().height / 2;
-    return item;
-}
-
-/**
- * 点数追加したいねん
->>>>>>> 630cb6dac0fba7ad103dedade65182a724a9b682
+ * 点数追加したいねん lisaco
  */
 function AddScore() {
 	 scoretxt = scoretxt + 1;
-	score1.text = "すこあ：" + ("0000" + scoretxt).slice(-4);
+	score1.text = "score：" + ("0000" + scoretxt).slice(-4);
 }
+
+/**
+ * ロケットくりっく！ lisaco
+ */
+ function rocketClick(event){
+ 	//ロケット発射！
+ 	var rocketinstance = createjs.Sound.createInstance('se_rocket');
+	rocketinstance.play('none', 0, 0, 0, 1, 0);
+ 
+	//びーじーえむ
+	//var bgminstance = createjs.Sound.createInstance('bgm');
+	//bgminstance.play('none', 0, 0, 0, 1, 0);
+ }

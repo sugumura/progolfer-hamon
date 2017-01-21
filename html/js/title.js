@@ -9,30 +9,19 @@ queue.on("complete", handleComplete, this);
 
 queue.loadManifest([
     {id: "space", src: 'assets/images/Space_view.jpg'},
-    {id: "start", src: 'assets/images/start.png'}
+    {id: "titlelogo", src: 'assets/images/Titlelogo.png'},
+    //bgm 呼び出してるよ lisaco
+	{id: "bgm_title", src: 'assets/sounds/bgm_title.mp3'}
 ]);
 
 var setting = {
-    background: function () {
-        var background = new createjs.Shape();
-        background.graphics.beginFill("DeepSkyBlue").drawRect(0, 0, 768, 768);
-        background.x = 0;
-        background.y = 0;
-        return background;
-    },
     sidebar: function () {
         var side = new createjs.Shape();
         side.graphics.beginFill("Grey").drawRect(518, 0, 250, 768);
         side.x = 0;
         side.y = 0;
         return side;
-    }
-    // start_Button: function (){
-    //     var start = new createsjs.Shape();
-
-
-    
-
+    }    
 };
 
 var asset = {
@@ -73,14 +62,12 @@ function init(event) {
  */
 function handleComplete(event) {
     console.log("test",event);
-   
-    var bitmap = new createjs.Bitmap(queue.getResult('space'));
-
-    var start = asset.createAssets(queue.getResult('start'), 259, 576);
-
-
-        var bitmap = new createjs.Bitmap(queue.getResult('space'));
-       
+    var titlelogo = asset.createAssets(queue.getResult('titlelogo'), 259, 192);    
+    var bitmap = new createjs.Bitmap(queue.getResult('space')).blur();
+    
+     //初期びーじーえむ lisaco
+	var bgminstance = createjs.Sound.createInstance('bgm_title');
+	bgminstance.play('none', 0, 0, -1, 0.5, 0);   
 
         // アンカーを中心にする
         bitmap.x = 0;
@@ -88,4 +75,6 @@ function handleComplete(event) {
 
     stage.addChildAt(bitmap, 1);
     stage.addChild(start);
+    stage.addChild(titlelogo);
+    
  }
