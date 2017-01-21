@@ -169,6 +169,7 @@ function handleComplete(event) {
 
 }
 
+
 /**
  * 通信開始
  * @param event

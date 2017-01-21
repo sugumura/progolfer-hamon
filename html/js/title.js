@@ -8,7 +8,7 @@ queue.installPlugin(createjs.Sound);
 queue.on("complete", handleComplete, this);
 
 queue.loadManifest([
-<<<<<<< HEAD
+
     {id: "rocket", src: 'assets/images/rocket.png'},
     {id: "star", src: 'assets/images/star.png'},
     {id: "planet1", src: 'assets/images/planet1.png'},
@@ -16,7 +16,8 @@ queue.loadManifest([
     {id: "planet3", src: 'assets/images/planet3.png'},
     {id: "planet4", src: 'assets/images/planet4.png'},
     {id: "planet5", src: 'assets/images/planet5.png'},
-    {id: "space", src: 'assets/images/Space_view.jpg'}
+    {id: "space", src: 'assets/images/Space_view.jpg'},
+    {id: "start", src: 'assets/images/start.png'},
 ]);
 
 var setting = {
@@ -80,7 +81,7 @@ function init(event) {
  */
 function handleComplete(event) {
     console.log("test",event);
-<<<<<<< HEAD
+
     var rocket = asset.createAssets(queue.getResult('rocket'), 259, 668);
     stage.addChild(rocket);
 
@@ -137,12 +138,12 @@ function handleComplete(event) {
     //     .to({ alpha: 1, y: 200 }, 500, createjs.Ease.getPowInOut(2))
     //     .to({ x: 100 }, 800, createjs.Ease.getPowInOut(2));
 }
-=======
+
         var bitmap = new createjs.Bitmap(queue.getResult('space'));
         // アンカーを中心にする
         bitmap.x = 0;
         bitmap.y = 0;
->>>>>>> 2cc58b8e8fed2eb8c7965a97b8be13e36ed8a07e
+
 
     stage.addChild(bitmap);
 
