@@ -57,8 +57,6 @@ function init(event) {
     console.log('DOMContentLoaded', event);
     stage = new createjs.Stage("GameWindow");
 
-    // window.location.href = 'パス名'; // 通常の遷移
-    // window.open('パス名', '_blank'); // 新しいタブを開き、ページを表示
     var sidebar = setting.sidebar();
     stage.addChild(sidebar);
 
