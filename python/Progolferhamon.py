@@ -33,7 +33,6 @@ class StarShip:
         self.speed = sp
         self.drection = dr
     def setData(self,x,y,sp,dr):
-        print("hello")
         self.x = x
         self.y = y
         self.speed = sp
