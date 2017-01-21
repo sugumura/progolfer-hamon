@@ -36,7 +36,6 @@ var asset = {
     }
 };
 
-
 /**
  * 初期化
  * @param event
