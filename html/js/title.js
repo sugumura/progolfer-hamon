@@ -8,8 +8,8 @@ queue.installPlugin(createjs.Sound);
 queue.on("complete", handleComplete, this);
 
 queue.loadManifest([
-    {id: "space", src: 'assets/images/Space_view.jpg'}
-
+    {id: "space", src: 'assets/images/Space_view.jpg'},
+    {id: "start", src: 'assets/images/start.png'}
 ]);
 
 var setting = {
@@ -57,6 +57,8 @@ function init(event) {
     console.log('DOMContentLoaded', event);
     stage = new createjs.Stage("GameWindow");
 
+    // window.location.href = 'パス名'; // 通常の遷移
+    // window.open('パス名', '_blank'); // 新しいタブを開き、ページを表示
     var sidebar = setting.sidebar();
     stage.addChild(sidebar);
 
@@ -65,19 +67,16 @@ function init(event) {
         // console.log(e);
         stage.update();
     });
-}
 
-/**
- * リソース読み込み完了時
- * @param event
- */
-function handleComplete(event) {
-    console.log("test",event);
+
         var bitmap = new createjs.Bitmap(queue.getResult('space'));
+
+    var start = asset.createAssets(queue.getResult('start'), 259, 576);
+
         // アンカーを中心にする
         bitmap.x = 0;
         bitmap.y = 0;
 
-    stage.addChild(bitmap);
+    stage.addChildAt(bitmap, 1);
 
  }
