@@ -60,15 +60,9 @@ function init(event) {
  */
 function handleComplete(event) {
     console.log("test",event);
-   
-    var bitmap = new createjs.Bitmap(queue.getResult('space'));
     var titlelogo = asset.createAssets(queue.getResult('titlelogo'), 259, 192);    
-
-    // var start = asset.createAssets(queue.getResult('start'), 259, 576);
-
-
-        var bitmap = new createjs.Bitmap(queue.getResult('space'));
-       
+    var bitmap = new createjs.Bitmap(queue.getResult('space'));
+    
 
         // アンカーを中心にする
         bitmap.x = 0;
