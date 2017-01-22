@@ -252,6 +252,9 @@ function handleComplete(event) {
     reset.addEventListener("click", resetAll);
     stage.addChild(reset);
 
+    var zanki = asset.createAssets(queue.getResult('rocket'),620,90);
+    stage.addChild(zanki);
+
 
     planet1.name = game.planet1.name;
     planet2.name = game.planet2.name;
@@ -266,7 +269,7 @@ function handleComplete(event) {
 	score2.color = "#ff7000";
 
     score1.x = 560;
-	score1.y = 25;	
+	score1.y = 10;	
     score2.x = 655;
 	score2.y = 75;
     AddScore();
