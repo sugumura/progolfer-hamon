@@ -14,7 +14,7 @@ http://ggj.igda.jp/
 
 このゲームは、燃料が切れて等速直線運動を続ける宇宙船を星の重力によってスイングバイさせながらゴールとなる母星に帰還させることを目指します。
 
-This game aims to let the player return to the mother star by the swing-by using the gravity of the star, the spacecraft which continues constant velocity linear movement with fuel running out.
+This game aims to let the player return to the mother star by the swing-by using the gravity wave of the star, the spacecraft which continues constant velocity linear movement with fuel running out.
 
 プラットフォームは、Webブラウザです。フロントエンドがHTML5とJava Scriptですので特にプラグインなどを使用する予定はありませんが古いブラウザでは動作しません。
 
