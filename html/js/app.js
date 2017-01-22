@@ -8,6 +8,7 @@ app.basePath = 'http://ggj2017kumamoto2f-env.ap-northeast-1.elasticbeanstalk.com
 app.limitTerm = 10; // 10ターム
 app.currentTerm = 0;    // 現在のターム
 app.deltaTime = 0;
+app.bgmManager = null;  // BGM管理
 
 var stage;  // 画面オブジェクト
 
@@ -44,7 +45,8 @@ queue.loadManifest([
     //bgm 呼び出してるよ lisaco
     {id: "bgm", src: 'assets/sounds/bgm.mp3'},
     {id: "bgm_thinking", src: 'assets/sounds/bgm_thinking.mp3'},
-    {id: "se_rocket", src: 'assets/sounds/se_rocket.mp3'}
+    {id: "se_rocket", src: 'assets/sounds/se_rocket.mp3'},
+    {id: "se_clear", src: 'assets/sounds/se_clear.mp3'}
     
 ]);
 
@@ -280,9 +282,10 @@ function handleComplete(event) {
     AddScore();
 
     //初期びーじーえむ lisaco
-    var bgminstance = createjs.Sound.createInstance('bgm_thinking');
-    bgminstance.play('none', 0, 0, -1, 1, 0);
-
+    app.bgmManager = createjs.Sound.createInstance('bgm_thinking');
+    if(app.isGameClear==false){
+       app.bgmManager.play('none', 0, 0, -1, 1, 0);
+}
     var space = new createjs.Bitmap(queue.getResult('space'));
     space.name = 'space';
     stage.addChildAt(space, 1);
@@ -311,10 +314,9 @@ function handleComplete(event) {
     planet5.addEventListener("pressup", planetPressUp);
 
     rocket.on("click", function (evt) {
-        bgminstance.stop();
+        app.bgmManager.stop();
         rocketClick();
     });
-
 }
 
 /**
@@ -479,6 +481,8 @@ function onClickStart(event) {
  * 隕石にぶつかった時
  */
 function crashMeteor() {
+    var crushBgm = createjs.Sound.createInstance('se_rocket');
+        crushBgm.play('none', 0, 0, 0, 0.5, 0);   
     resetAll();
 }
 
@@ -490,8 +494,10 @@ function gameClear() {
     app.isGameClear = true;
     app.currentTerm = app.limitTerm;
     rocketTweenClear();
-
+    app.bgmManager.stop();
+    ClearSound();
     alert("星についたよ");
+
 }
 
 /**
@@ -576,6 +582,28 @@ function rocketClick(event) {
     rocketinstance.play('none', 0, 0, 0, 1, 0);
 
     //びーじーえむ
-    //var bgminstance = createjs.Sound.createInstance('bgm');
-    //bgminstance.play('none', 0, 0, 0, 1, 0);
+    //var app.bgmManager = createjs.Sound.createInstance('bgm');
+    //app.bgmManager.play('none', 0, 0, 0, 1, 0);
 }
+
+function ClearSound(event) {
+    //ロケット発射！
+    var clearinstance = createjs.Sound.createInstance('se_clear');
+    clearinstance.play('none', 0, 0, 0, 1, 0);
+
+    //びーじーえむ
+    //var app.bgmManager = createjs.Sound.createInstance('bgm');
+    //app.bgmManager.play('none', 0, 0, 0, 1, 0);
+}
+
+
+// ゲームオーバーイベント
+
+//function gameOver(event){
+// if(衝突の条件){
+//  window.location.href = './gameover.html'; // 通常の遷移
+
+// }
+
+//}
+
