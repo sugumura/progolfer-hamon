@@ -84,6 +84,7 @@ def calculatePlayerNextPoint(px,py,pv):
     ans.append(py - pv[1])
     return ans
 
+frame_length = 60 * 6
 def getCaluculatedFrame(ship,starlist):
     #csv = ""
     stars = []
@@ -97,7 +98,7 @@ def getCaluculatedFrame(ship,starlist):
     current_ship = ship
     frame=[]
 
-    for f in range(60):
+    for f in range(frame_length):
         #print("--------------------------------------")
 
         current_ship=Progolferhamon.StarShip(current_ship.x,current_ship.y,current_ship.speed,current_ship.direction)
@@ -133,6 +134,60 @@ def getCaluculatedFrame(ship,starlist):
         #print("current_ship y ",current_ship.y)
         frame.append(current_ship)
         #csv += str(f) + ", " + str(current_ship.x)  + ", " + str(current_ship.y) + ", " + str(current_ship.speed) + ", " + str(current_ship.direction) + "\n"
+
+    #with open("./test3.csv","wb") as w:
+        #w.write(csv)
+    return frame
+
+def getCaluculatedFrameMeteo(meteo,starlist):
+        #csv = ""
+    stars = []
+    #istars = []
+    #istars.append(Star(259,68,100))
+    #istars.append(Star(400,35,50))
+    for i in range(len(starlist)):
+        stars.append([starlist[i].x,starlist[i].y,starlist[i].grabity])
+    #stars = np.asarray(stars)
+
+    current_meteo = meteo
+    frame=[]
+
+    for f in range(frame_length):
+        #print("--------------------------------------")
+
+        current_meteo=Progolferhamon.Meteo(current_meteo.x,current_meteo.y,current_meteo.speed,current_meteo.direction)
+        current_meteo_point_array = []
+        current_meteo_point_array.append(current_meteo.x)
+        current_meteo_point_array.append(current_meteo.y)
+        #current_meteo_point_array = np.asarray(current_meteo_point_array)
+
+
+        current_player_vector = getPlayerVector(current_meteo.speed,current_meteo.direction)
+        #print("current_player_vector x %.10f" % current_player_vector[0])
+        #print("current_player_vector y %.10f" % current_player_vector[1])
+
+        stars_vector = getCalculatedStarVectorToPlayer(current_meteo_point_array,stars)
+        #print("stars_vector %.10f" % stars_vector[0][0])
+       # print("stars_vector %.10f" % stars_vector[0][1])
+
+        sum_vector = vectorsum(current_player_vector,stars_vector)
+
+        #print("sum_vector x %.10f" % sum_vector[0])
+        #print("sum_vector x %.10f" % sum_vector[1])
+
+        next_meteo_speed_deg = speeddeg(sum_vector[0],sum_vector[1],current_player_vector[0],current_player_vector[1])
+
+        next_meteo_point = calculatePlayerNextPoint(current_meteo.x,current_meteo.y,sum_vector)
+
+       # print("next_speed %.10f"%next_meteo_speed_deg[0])
+        #print("next_deg %.10f"%next_meteo_speed_deg[1])
+
+        #print("next_point x",next_meteo_point[0])
+        #print("next_point y",next_meteo_point[1])
+        current_meteo.setData(next_meteo_point[0],next_meteo_point[1],next_meteo_speed_deg[0],next_meteo_speed_deg[1])
+        #print("current_meteo y ",current_meteo.y)
+        frame.append(current_meteo)
+        #csv += str(f) + ", " + str(current_meteo.x)  + ", " + str(current_meteo.y) + ", " + str(current_meteo.speed) + ", " + str(current_meteo.direction) + "\n"
 
     #with open("./test3.csv","wb") as w:
         #w.write(csv)
