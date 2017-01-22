@@ -33,12 +33,29 @@ welcome = """
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <title>Welcome Global Game Jam 2017 Kumamoto progolfer-hamon</title>
-</head>
-<body id="sample">
-  <h1>Global Game Jam 2017 Kumamoto progolfer-hamon</h1>
-  <p>Test Info Page</p>
+    <meta charset="utf-8">
+    <title>Pro Golfer HAMON</title>
+    <style>
+    * {
+        padding: 0;
+        margin: 0
+    }
+    </style>
+    <script src="node_modules/createjs-easeljs/lib/easeljs-0.8.2.min.js"></script>
+    <script src="node_modules/createjs-preloadjs/lib/preloadjs-0.6.2.min.js"></script>
+    <script src="node_modules/createjs-soundjs/lib/soundjs-0.6.2.min.js"></script>
+    <script src="node_modules/createjs-tweenjs/lib/tweenjs-0.6.0.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="html/css/move.css" media="all">
+<body>
+    <h1>Global Game Jam 2017 Kumamoto progolfer-hamon</h1>
+    <div id="test">
+        <img src="html/assets/images/Titlelogo.png">
+    </div>
+    <div id="test2"> 
+        <a href="html/index.html" onclick="imgClick();"><img src="html/assets/images/start.png" style=""></a>
+    </div>
+    <canvas id="GameWindow" width="768" height="768"></canvas>
+    <script src="html/js/title.js"></script>
 </body>
 </html>
 """
@@ -111,9 +128,13 @@ def application(environ, start_response):
         status = '200 OK'
         headers = [('Content-type', 'application/json')]
     else:
-        response = ''
+        if path == '/':
+            response=welcome
+        else:
+            response=''
+
         status = '200 OK'
-        headers = [('Content-type', 'application/json'),
+        headers = [('Content-type', 'text/html'),
                    ('Access-Control-Allow-Origin', '*'),
                    ('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT, DELETE'),
                    ('Access-Control-Allow-Headers', 'Content-Type, X-Auth-Token, Origin, Authorization')
@@ -130,21 +151,12 @@ def startgameservice(reqstr):
     logger.info("--Create Model")
     model=Progolferhamon.ProgolferHamon()
 
-    model.StarShip=Progolferhamon.StarShip(259,700,1,90)
-    model.StarShip.x=reqobj["starship"]["x"]
-    model.StarShip.y=reqobj["starship"]["y"]
-    model.StarShip.speed=reqobj["starship"]["speed"]
-    model.StarShip.direction=reqobj["starship"]["direction"]
+    model.StarShip=Progolferhamon.StarShip(reqobj["starship"]["x"],reqobj["starship"]["y"],reqobj["starship"]["speed"],reqobj["starship"]["direction"])
 
-    model.StageInfo=Progolferhamon.StageInfo()
-    model.StageInfo.id=reqobj["stageinfo"]["id"]
-    model.StageInfo.name=reqobj["stageinfo"]["name"]
+    model.StageInfo=Progolferhamon.StageInfo(reqobj["stageinfo"]["id"],reqobj["stageinfo"]["name"])
 
     for itm in reqobj["stars"]:
-        star=Progolferhamon.Star(259,68,0.1)
-        star.x=itm["x"]
-        star.y=itm["y"]
-        star.grabity=itm["gravity"]
+        star=Progolferhamon.Star(itm["x"],itm["y"],itm["gravity"])
         model.Stars.append(star)
 
     logger.info("--Create Position")
