@@ -36,6 +36,7 @@ queue.loadManifest([
     {id: "planet4", src: 'assets/images/planet2.png'},
     {id: "planet5", src: 'assets/images/planet3.png'},
     {id: "space", src: 'assets/images/Space_view.jpg'},
+    {id: "player1", src: 'assets/images/rocket.png'},
     //bgm 呼び出してるよ lisaco
     {id: "bgm", src: 'assets/sounds/bgm.mp3'},
     {id: "bgm_thinking", src: 'assets/sounds/bgm_thinking.mp3'},
@@ -107,25 +108,8 @@ var game = {
         gravity: 0.0006125,
         sideX: 643,
         sideY: 668 - 120 * 4
-    },
-    player1: {
-        name: 'player',
-        gravity: 0,
-        sideX: 518 + 62.5,
-        sideY: 680
-    },
-    player2: {
-        name: 'player',
-        gravity: 0,
-        sideX: 518 + 62.5 * 2,
-        sideY: 680
-    },
-    player3: {
-        name: 'player',
-        gravity: 0,
-        sideX: 518 + 62.5 * 3,
-        sideY: 680
     }
+ 
 };
 
 var asset = {
@@ -153,6 +137,11 @@ var asset = {
         return item;
     }
 };
+
+// playerShip
+// var player1 = asset.createAssets(queue.getResult('player1'), 680, 62.5);
+
+// stage.addChild(rocket);
 
 
 /**
@@ -239,9 +228,6 @@ function handleComplete(event) {
     var planet4 = asset.createAssets(queue.getResult('planet4'), game.planet4.sideX, game.planet4.sideY);
     var planet5 = asset.createAssets(queue.getResult('planet5'), game.planet5.sideX, game.planet5.sideY);
 
-    // 残機
-    var player = 
-
     planet1.name = game.planet1.name;
     planet2.name = game.planet2.name;
     planet3.name = game.planet3.name;
@@ -275,10 +261,7 @@ function handleComplete(event) {
     stage.addChild(planet5);
     stage.addChild(score1);
     stage.addChild(score2);
-    stage.addChild(player1);
-    stage.addChild(player2);
-    stage.addChild(player3);
-
+ 
     planet1.on("pressmove", function (evt) {
         evt.target.x = evt.stageX;
         evt.target.y = evt.stageY;
