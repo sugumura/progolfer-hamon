@@ -36,8 +36,11 @@ queue.loadManifest([
     {id: "planet4", src: 'assets/images/planet2.png'},
     {id: "planet5", src: 'assets/images/planet3.png'},
     {id: "space", src: 'assets/images/Space_view.jpg'},
+    {id: "meteor1",src: 'assets/images/meteor1.png'},
+    {id: "meteor2",src: 'assets/images/meteor2.png'},
     {id: "go",src: 'assets/images/go.png'},
     {id: "reset",src: 'assets/images/reset.png'},
+
     //bgm 呼び出してるよ lisaco
     {id: "bgm", src: 'assets/sounds/bgm.mp3'},
     {id: "bgm_thinking", src: 'assets/sounds/bgm_thinking.mp3'},
@@ -80,6 +83,11 @@ var game = {
         x: 259,
         y: 68,
         gravity: 0.1
+    },
+    meteor1: {  // 障害物
+        name: 'meteor1',
+        x: 259,
+        y: 350
     },
     planet1: {
         name: 'planet1',
@@ -221,12 +229,25 @@ function handleComplete(event) {
     star.name = game.star.name;
     stage.addChild(star);
 
+    // 惑星
     var planet1 = asset.createAssets(queue.getResult('planet1'), game.planet1.sideX, game.planet1.sideY);
     var planet2 = asset.createAssets(queue.getResult('planet2'), game.planet2.sideX, game.planet2.sideY);
     var planet3 = asset.createAssets(queue.getResult('planet3'), game.planet3.sideX, game.planet3.sideY);
     var planet4 = asset.createAssets(queue.getResult('planet4'), game.planet4.sideX, game.planet4.sideY);
     var planet5 = asset.createAssets(queue.getResult('planet5'), game.planet5.sideX, game.planet5.sideY);
-    
+
+    // 隕石
+    var meteor1 = asset.createAssets(queue.getResult(game.meteor1.name), game.meteor1.x, game.meteor1.y);
+    stage.addChild(meteor1);
+
+    // 隕石アニメーション
+    createjs.Tween.get(meteor1, {loop: true})
+        .to({y: meteor1.y + 10, rotation: 0}, 1000)
+        .to({y: meteor1.y, rotation: 0}, 1000)
+        .to({y: meteor1.y - 10, rotation: 0}, 1000)
+        .to({y: meteor1.y, rotation: 0}, 1000);
+
+    // UI
     var go = asset.createAssets(queue.getResult('go'),50,15); 
     go.addEventListener("click", onClickStart);
     go.name = 'go';
