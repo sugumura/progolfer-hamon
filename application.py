@@ -47,7 +47,7 @@ welcome = """
     <script src="node_modules/createjs-tweenjs/lib/tweenjs-0.6.0.min.js"></script>
     <link rel="stylesheet" type="text/css" href="html/css/move.css" media="all">
 <body>
-    <h1>Global Game Jam 2017 Kumamoto progolfer-hamon</h1>
+    <h1>Global Game Jam 2017 Kumamoto,Japan Progolfer-Hamon</h1>
     <div id="test">
         <img src="html/assets/images/Titlelogo.png">
     </div>
