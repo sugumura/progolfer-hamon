@@ -2,8 +2,8 @@
 
 document.addEventListener("DOMContentLoaded", init);
 
-var URL = 'http://ggj2017kumamoto2f-env.ap-northeast-1.elasticbeanstalk.com';
-
+var app = window.app || {};
+app.basePath = 'http://ggj2017kumamoto2f-env.ap-northeast-1.elasticbeanstalk.com';
 var stage;
 
 var queue = new createjs.LoadQueue();
@@ -392,7 +392,7 @@ function request(event) {
         gravity: game.planet5.gravity
     });
 
-    axios.post(URL + '/startgame', {
+    axios.post(app.basePath + '/startgame', {
             "starship" : {
                 "x" : 259,
                 "y" : 700,
