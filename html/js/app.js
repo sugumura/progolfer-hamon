@@ -20,7 +20,7 @@ var score1 = new createjs.Text();
 var score2 = new createjs.Text();
 
 var playerShip = 62.5;
-var retake_limit = 10;
+var retake_limit = 3;
 var retake_number = 0;
 var time_limit = 180;
 var time_current = 0 ;
@@ -204,6 +204,7 @@ function resetAll() {
     retake_number++;
     AddScore();
     rocketTweenClear();
+    tachPlanetEvent();
 }
 
 /**
@@ -417,12 +418,15 @@ function onOneFinish(lastFrame) {
  * @param event
  */
 function onClickStart(event) {
-    detachPlanetEvent();
     var go = stage.getChildByName('go');
+    detachPlanetEvent();
     go.visible = false;
     if(flag_start == false){
         time_start = app.deltaTime;
         flag_start = true;
+        
+    }else{
+
     }
     
     app.currentTerm = 0;
