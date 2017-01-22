@@ -111,19 +111,19 @@ var game = {
     player1: {
         name: 'player',
         gravity: 0,
-        sideX: 518 + playerShip,
+        sideX: 518 + 62.5,
         sideY: 680
     },
     player2: {
         name: 'player',
         gravity: 0,
-        sideX: 518 + playerShip * 2,
+        sideX: 518 + 62.5 * 2,
         sideY: 680
     },
     player3: {
         name: 'player',
         gravity: 0,
-        sideX: 518 + playerShip * 3,
+        sideX: 518 + 62.5 * 3,
         sideY: 680
     }
 };
@@ -274,7 +274,10 @@ function handleComplete(event) {
     stage.addChild(planet4);
     stage.addChild(planet5);
     stage.addChild(score1);
-    stage.addChild(score2)
+    stage.addChild(score2);
+    stage.addChild(player1);
+    stage.addChild(player2);
+    stage.addChild(player3);
 
     planet1.on("pressmove", function (evt) {
         evt.target.x = evt.stageX;
