@@ -3,6 +3,7 @@
 document.addEventListener("DOMContentLoaded", init);
 
 var app = window.app || {};
+app.isGameClear = false;
 app.basePath = 'http://ggj2017kumamoto2f-env.ap-northeast-1.elasticbeanstalk.com';
 app.limitTerm = 10; // 10ターム
 app.currentTerm = 0;    // 現在のターム
@@ -18,7 +19,6 @@ queue.on("complete", handleComplete, this);
 var score1 = new createjs.Text();
 var score2 = new createjs.Text();
 
-var scoretxt;
 var playerShip = 62.5;
 var retake_limit = 10;
 var retake_number = 0;
@@ -36,10 +36,13 @@ queue.loadManifest([
     {id: "planet4", src: 'assets/images/planet2.png'},
     {id: "planet5", src: 'assets/images/planet3.png'},
     {id: "space", src: 'assets/images/Space_view.jpg'},
+    {id: "go",src: 'assets/images/go.png'},
+    {id: "reset",src: 'assets/images/reset.png'},
     //bgm 呼び出してるよ lisaco
     {id: "bgm", src: 'assets/sounds/bgm.mp3'},
     {id: "bgm_thinking", src: 'assets/sounds/bgm_thinking.mp3'},
     {id: "se_rocket", src: 'assets/sounds/se_rocket.mp3'}
+    
 ]);
 
 var setting = {
@@ -107,25 +110,8 @@ var game = {
         gravity: 0.0006125,
         sideX: 643,
         sideY: 668 - 120 * 4
-    },
-    player1: {
-        name: 'player',
-        gravity: 0,
-        sideX: 518 + 62.5,
-        sideY: 680
-    },
-    player2: {
-        name: 'player',
-        gravity: 0,
-        sideX: 518 + 62.5 * 2,
-        sideY: 680
-    },
-    player3: {
-        name: 'player',
-        gravity: 0,
-        sideX: 518 + 62.5 * 3,
-        sideY: 680
     }
+ 
 };
 
 var asset = {
@@ -154,6 +140,11 @@ var asset = {
     }
 };
 
+// playerShip
+// var player1 = asset.createAssets(queue.getResult('player1'), 680, 62.5);
+
+// stage.addChild(rocket);
+
 
 /**
  * 初期化
@@ -163,21 +154,21 @@ function init(event) {
 
     console.log('DOMContentLoaded', event);
     stage = new createjs.Stage("GameWindow");
-    scoretxt = 0;
 
     var background = setting.background();
     var sidebar = setting.sidebar();
     stage.addChild(background);
     stage.addChild(sidebar);
 
-    var button = asset.createButton('開始', 100, 30);
-    button.addEventListener("click", onClickStart);
-    stage.addChild(button);
+    //var button = asset.createButton('', 100, 30);
+    //button.addEventListener("click", onClickStart);
+    //stage.addChild(button);
+    
 
-    var reset = asset.createButton('リセット', 100, 30);
-    reset.y = 40;
-    reset.addEventListener("click", resetAll);
-    stage.addChild(reset);
+    //var reset = asset.createButton('', 100, 30);
+    //reset.y = 40;
+    //reset.addEventListener("click", resetAll);
+    //stage.addChild(reset);
 
     createjs.Ticker.setFPS(60);
     createjs.Ticker.addEventListener('tick', function (e) {
@@ -238,9 +229,18 @@ function handleComplete(event) {
     var planet3 = asset.createAssets(queue.getResult('planet3'), game.planet3.sideX, game.planet3.sideY);
     var planet4 = asset.createAssets(queue.getResult('planet4'), game.planet4.sideX, game.planet4.sideY);
     var planet5 = asset.createAssets(queue.getResult('planet5'), game.planet5.sideX, game.planet5.sideY);
+    
+    var go = asset.createAssets(queue.getResult('go'),50,15); 
+    go.addEventListener("click", onClickStart);
+    go.name = 'go';
+    stage.addChild(go);
 
-    // 残機
-    var player = 
+    var reset = asset.createAssets(queue.getResult('reset'),470,15); 
+    reset.addEventListener("click", resetAll);
+    stage.addChild(reset);
+
+    var zanki = asset.createAssets(queue.getResult('rocket'),620,90);
+    stage.addChild(zanki);
 
     planet1.name = game.planet1.name;
     planet2.name = game.planet2.name;
@@ -255,7 +255,7 @@ function handleComplete(event) {
 	score2.color = "#ff7000";
 
     score1.x = 560;
-	score1.y = 25;	
+	score1.y = 10;	
     score2.x = 655;
 	score2.y = 75;
     AddScore();
@@ -275,9 +275,6 @@ function handleComplete(event) {
     stage.addChild(planet5);
     stage.addChild(score1);
     stage.addChild(score2);
-    stage.addChild(player1);
-    stage.addChild(player2);
-    stage.addChild(player3);
 
     planet1.on("pressmove", function (evt) {
         evt.target.x = evt.stageX;
@@ -350,6 +347,16 @@ function isHitSidebar(item) {
 }
 
 /**
+ * AとBのヒットテスト
+ * @param a
+ * @param b
+ */
+function isHitTest(a, b) {
+    var point = a.localToLocal(60, 60, b);
+    return b.hitTest(point.x, point.y);
+}
+
+/**
  * rocketの移動
  * {
  *     x: 0,
@@ -365,7 +372,7 @@ function goRocket(data) {
     for (var i = 0, len = data.frames.length; i < len; i++) {
         var item = data.frames[i];
         tween.to({x: item.x, y: item.y, rotation: -item.direction - 270}, 8)
-            .call(onOneSecond);
+            .call(onOneSecond, [rocket]);
     }
     tween.call(onOneFinish, [data.frames[len - 1]]);
 }
@@ -381,10 +388,14 @@ function rocketTweenClear() {
 /**
  * 1秒毎のフレーム後にコール
  * 障害物判定などに利用する
- * @param e
+ * @param rocket
  */
-function onOneSecond(e) {
-    console.log('onOnSecond', e.target.x, e.target.y);
+function onOneSecond(rocket) {
+    var star = stage.getChildByName(game.star.name);
+    var isHit = isHitTest(rocket, star);
+    if (isHit) {
+        gameClear();
+    }
 }
 
 function onOneFinish(lastFrame) {
@@ -401,11 +412,22 @@ function onOneFinish(lastFrame) {
  * @param event
  */
 function onClickStart(event) {
+    var go = stage.getChildByName('go');
     time_start = app.deltaTime;
     app.currentTerm = 0;
     flag_start = true;
+    go.visible = false;
     rocketTweenClear();
     request();
+}
+
+function gameClear() {
+    if (app.isGameClear === true) return;
+    app.isGameClear = true;
+    app.currentTerm = app.limitTerm;
+    rocketTweenClear();
+
+    alert("星についたよ");
 }
 
 function request(lastFrame) {
@@ -475,8 +497,6 @@ function AddScore() {
         localStorage.setItem("Score",(time_limit - (time_current / 1000)) + ((retake_limit - retake_number)*100) );
         window.location.href = 'gameover.html';
     }
-	 
-     //score1.text = "score：" + ("0000" + scoretxt).slice(-4);
 }
 
 /**
