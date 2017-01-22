@@ -46,7 +46,6 @@ welcome = """
     <script src="html/node_modules/createjs-soundjs/lib/soundjs-0.6.2.min.js"></script>
     <script src="html/node_modules/createjs-tweenjs/lib/tweenjs-0.6.0.min.js"></script>
     <link rel="stylesheet" type="text/css" href="html/css/move.css" media="all">
-    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no"/>
 <body>
     <h1>Global Game Jam 2017 Kumamoto,Japan Progolfer-Hamon</h1>
     <div id="box">
