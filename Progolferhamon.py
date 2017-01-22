@@ -51,7 +51,7 @@ class ProgolferHamon:
         self.Frames = py.getCaluculatedFrame(self.StarShip,self.Stars)
     
     def createMeteoPositionData(self):
-        self.MeteosFrames = []]
+        self.MeteosFrames = []
         for i in range(len(self.Meteos)):
             self.MeteosFrames.append(py.getCaluculatedFrameMeteo(self.Meteos[i],self.Stars))
 
