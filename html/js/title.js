@@ -12,7 +12,9 @@ queue.loadManifest([
     { id: "titlelogo", src: 'assets/images/Titlelogo.png' },
     //bgm 呼び出してるよ lisaco
     { id: "bgm_title", src: 'assets/sounds/bgm_title.mp3' },
-    // { id: "se_rocket", src: 'assets/sounds/se_rocket.mp3' }
+    { id: "se_rocket", src: 'assets/sounds/se_rocket.mp3' },//start buttonで使う
+
+    { id: "start", src: 'assets/images/start.png' }
 ]);
 
 var setting = {
@@ -24,7 +26,7 @@ var setting = {
         return side;
     }
 };
-
+    
 var asset = {
     createAssets: function(resource, x, y) {
         var bitmap = new createjs.Bitmap(resource);
@@ -82,10 +84,10 @@ function handleComplete(event) {
         start.style.display = "block";
     }, 4000)
     
-    // start.on("click", function(evt) {
-    //     bgminstance.stop();
-    //     startClick();
-    // });
+    start.on("click", function(evt) {
+        bgminstance.stop();
+        startClick();
+    });
 
 }
 
@@ -96,12 +98,8 @@ function test(event) {
     };
 }
 
-// function startClick(event) {
-//     //ロケット発射！
-//     var startinstance = createjs.Sound.createInstance('se_rocket');
-//     startinstance.play('none', 0, 0, 0, 1, 0);
+function startClick(event) {
+    var startinstance = createjs.Sound.createInstance('se_rocket');//ロケットの音と兼用
+    startinstance.play('none', 0, 0, 0, 1, 0);
 
-//     //びーじーえむ
-//     //var bgminstance = createjs.Sound.createInstance('bgm');
-//     //bgminstance.play('none', 0, 0, 0, 1, 0);
-// }
+}
