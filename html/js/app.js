@@ -157,6 +157,11 @@ function init(event) {
     console.log('DOMContentLoaded', event);
     stage = new createjs.Stage("GameWindow");
 
+    // スマホ
+    if(createjs.Touch.isSupported() == true){
+        createjs.Touch.enable(stage)
+    }
+
     var background = setting.background();
     var sidebar = setting.sidebar();
     stage.addChild(background);
