@@ -79,9 +79,9 @@ class Star:
         self.grabity = g
 
 class StageInfo:
-    def __init__(self):
-        self.id=0
-        self.name=""
+    def __init__(self,i,nm):
+        self.id=i
+        self.name=nm
 
 class Meteo:
     def __init__(self,x,y,sp,dr):
