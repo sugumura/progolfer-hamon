@@ -296,7 +296,7 @@ function isHitSidebar(item) {
     var sidebar = stage.getChildByName('sidebar');
     var point = item.localToLocal(0, 0, sidebar);   // 相対座標
     var isHit = sidebar.hitTest(point.x, point.y);  // サイドバーへの判定
-    
+
     console.log(item.name + ' Hit?', isHit);
     return isHit;
 }
@@ -364,39 +364,22 @@ function request(lastFrame) {
     var p3 = stage.getChildByName(game.planet3.name);
     var p4 = stage.getChildByName(game.planet4.name);
     var p5 = stage.getChildByName(game.planet5.name);
-
+    var ps = [p1, p2, p3, p4, p5];
     var stars = [{
         x: game.star.x,
         y: game.star.y,
         gravity: game.star.gravity
     }];
 
-
-    stars.push({
-        x: p1.x,
-        y: p1.y,
-        gravity: game.planet1.gravity
-    });
-    stars.push({
-        x: p2.x,
-        y: p2.y,
-        gravity: game.planet2.gravity
-    });
-    stars.push({
-        x: p3.x,
-        y: p3.y,
-        gravity: game.planet3.gravity
-    });
-    stars.push({
-        x: p4.x,
-        y: p4.y,
-        gravity: game.planet4.gravity
-    });
-    stars.push({
-        x: p5.x,
-        y: p5.y,
-        gravity: game.planet5.gravity
-    });
+    for (var i=0, len=ps.length; i < len; i++) {
+        if (isHitSidebar(ps[i]) === false) {
+            stars.push({
+                x: ps[i].x,
+                y: ps[i].y,
+                gravity: game['planet' + (i + 1)].gravity
+            });
+        }
+    }
 
     // スタート初期値
     var starship = {
