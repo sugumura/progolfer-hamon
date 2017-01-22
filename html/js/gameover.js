@@ -86,7 +86,7 @@ function handleComplete(event) {
 
  }
 
-function test (event){
-     // body...
-        window.location.href = './gameover.html'; // 通常の遷移
- } 
+// function test (event){
+//      // body...
+//         window.location.href = './gameover.html'; // 通常の遷移
+//  } 
