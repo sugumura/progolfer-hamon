@@ -77,7 +77,7 @@ function handleComplete(event) {
         var gameover = asset.createAssets(queue.getResult('gameover'), 259, 192);
         var bgminstance = createjs.Sound.createInstance('se_rocket');
         bgminstance.play('none', 0, 0, -1, 0.5, 0);   
-
+        createjs.Sound.stop();
         // アンカーを中心にする
         bitmap.x = 0;
         bitmap.y = 0;
