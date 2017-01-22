@@ -76,15 +76,14 @@ function handleComplete(event) {
         var bitmap = new createjs.Bitmap(queue.getResult('space'));
         var gameover = asset.createAssets(queue.getResult('gameover'), 259, 192);
         var bgminstance = createjs.Sound.createInstance('se_rocket');
-        bgminstance.play('none', 0, 0, -1, 0.5, 0);   
-
+        bgminstance.play('none', 0, 0, 0, 0.5, 0);   
         // アンカーを中心にする
         bitmap.x = 0;
         bitmap.y = 0;
         // gameover.addEventListener("click", test);
     stage.addChildAt(bitmap,1);
-
  }
+
 
 // function test (event){
 //      // body...

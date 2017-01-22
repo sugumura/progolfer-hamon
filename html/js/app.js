@@ -2,7 +2,13 @@
 
 document.addEventListener("DOMContentLoaded", init);
 
-var stage;
+var app = window.app || {};
+app.basePath = 'http://ggj2017kumamoto2f-env.ap-northeast-1.elasticbeanstalk.com';
+app.limitTerm = 10; // 10ターム
+app.currentTerm = 0;    // 現在のターム
+app.deltaTime = 0;
+
+var stage;  // 画面オブジェクト
 
 var queue = new createjs.LoadQueue();
 queue.installPlugin(createjs.Sound);
@@ -10,28 +16,31 @@ queue.on("complete", handleComplete, this);
 
 //スコア変数 lisaco
 var score1 = new createjs.Text();
+var score2 = new createjs.Text();
+
 var scoretxt;
+var playerShip = 62.5;
+var retake_limit = 10;
+var retake_number = 0;
+var time_limit = 180;
+var time_current = 0 ;
+var time_start = 0;
+var flag_start = false;
 
 queue.loadManifest([
     {id: "rocket", src: 'assets/images/rocket.png'},
     {id: "star", src: 'assets/images/star.png'},
-    {id: "planet1", src: 'assets/images/planet1.png'},
-    {id: "planet2", src: 'assets/images/planet2.png'},
-    {id: "planet3", src: 'assets/images/planet3.png'},
-    {id: "planet4", src: 'assets/images/planet4.png'},
-    {id: "planet5", src: 'assets/images/planet5.png'},
+    {id: "planet1", src: 'assets/images/planet5.png'},
+    {id: "planet2", src: 'assets/images/planet4.png'},
+    {id: "planet3", src: 'assets/images/planet1.png'},
+    {id: "planet4", src: 'assets/images/planet2.png'},
+    {id: "planet5", src: 'assets/images/planet3.png'},
     {id: "space", src: 'assets/images/Space_view.jpg'},
     //bgm 呼び出してるよ lisaco
-	{id: "bgm", src: 'assets/sounds/bgm.mp3'},
-	{id: "bgm_thinking", src: 'assets/sounds/bgm_thinking.mp3'},
-	{id: "se_rocket", src: 'assets/sounds/se_rocket.mp3'}
+    {id: "bgm", src: 'assets/sounds/bgm.mp3'},
+    {id: "bgm_thinking", src: 'assets/sounds/bgm_thinking.mp3'},
+    {id: "se_rocket", src: 'assets/sounds/se_rocket.mp3'}
 ]);
-
-//queue.loadFile([
-//	{id: "bgm", src: 'assets/sounds/bgm.mp3'},
-//	{id: "bgm_thinking", src: 'assets/sounds/bgm_thinking.mp3'},
-//	{id: "se_rocket", src: 'assets/sounds/se_rocket.mp3'}
-//	]);
 
 var setting = {
     background: function () {
@@ -39,13 +48,15 @@ var setting = {
         background.graphics.beginFill("DeepSkyBlue").drawRect(0, 0, 768, 768);
         background.x = 0;
         background.y = 0;
+        background.name = 'background';
         return background;
     },
     sidebar: function () {
         var side = new createjs.Shape();
         side.graphics.beginFill("Grey").drawRect(518, 0, 250, 768);
-        side.x = 0;
-        side.y = 0;
+        // side.y = 0;
+        // side.x = 0;
+        side.name = 'sidebar';
         return side;
     }
 };
@@ -57,38 +68,63 @@ var game = {
     rocket: {
         name: 'rocket',
         x: 259,
-        y: 668,
-        rotation: 0
+        y: 700,
+        direction: 90,  // 向き
+        speed: 1        // 速度
     },
     star: {
         name: 'star',
         x: 259,
-        y: 100
+        y: 68,
+        gravity: 0.1
     },
     planet1: {
         name: 'planet1',
-        x: 643,
-        y: 668
+        gravity: 0.01,
+        sideX: 643,
+        sideY: 650
     },
     planet2: {
         name: 'planet2',
-        x: 643,
-        y: 668 - 120
+        gravity: 0.005,
+        sideX: 643,
+        sideY: 668 - 160
     },
     planet3: {
         name: 'planet3',
-        x: 643,
-        y: 668 - 120 * 2
+        gravity: 0.0025,
+        sideX: 643,
+        sideY: 668 - 140 * 2
     },
     planet4: {
         name: 'planet4',
-        x: 643,
-        y: 668 - 120 * 3
+        gravity: 0.00125,
+        sideX: 643,
+        sideY: 668 - 130 * 3
     },
     planet5: {
         name: 'planet5',
-        x: 643,
-        y: 668 - 120 * 4
+        gravity: 0.0006125,
+        sideX: 643,
+        sideY: 668 - 120 * 4
+    },
+    player1: {
+        name: 'player',
+        gravity: 0,
+        sideX: 518 + playerShip,
+        sideY: 680
+    },
+    player2: {
+        name: 'player',
+        gravity: 0,
+        sideX: 518 + playerShip * 2,
+        sideY: 680
+    },
+    player3: {
+        name: 'player',
+        gravity: 0,
+        sideX: 518 + playerShip * 3,
+        sideY: 680
     }
 };
 
@@ -110,6 +146,11 @@ var asset = {
         button.addChild(bg);
         button.addChild(text);
         return button;
+    },
+    setXY: function (item, x, y) {
+        item.x = x;
+        item.y = y;
+        return item;
     }
 };
 
@@ -130,7 +171,7 @@ function init(event) {
     stage.addChild(sidebar);
 
     var button = asset.createButton('開始', 100, 30);
-    button.addEventListener("click", request);
+    button.addEventListener("click", onClickStart);
     stage.addChild(button);
 
     var reset = asset.createButton('リセット', 100, 30);
@@ -138,10 +179,16 @@ function init(event) {
     reset.addEventListener("click", resetAll);
     stage.addChild(reset);
 
-    createjs.Ticker.setFPS(30);
-    createjs.Ticker.addEventListener('tick', function(e){
+    createjs.Ticker.setFPS(60);
+    createjs.Ticker.addEventListener('tick', function (e) {
         // console.log(e);
         stage.update();
+        app.deltaTime += e.delta;
+        if(flag_start == true){
+            time_current = app.deltaTime - time_start;
+            AddScore();
+        }
+        
     });
 }
 
@@ -156,6 +203,20 @@ function resetAll() {
     var planet3 = stage.getChildByName(game.planet3.name);
     var planet4 = stage.getChildByName(game.planet4.name);
     var planet5 = stage.getChildByName(game.planet5.name);
+
+    asset.setXY(rocket, game.rocket.x, game.rocket.y);
+    rocket.rotation = 0;
+    asset.setXY(star, game.star.x, game.star.y);
+    asset.setXY(planet1, game.planet1.sideX, game.planet1.sideY);
+    asset.setXY(planet2, game.planet2.sideX, game.planet2.sideY);
+    asset.setXY(planet3, game.planet3.sideX, game.planet3.sideY);
+    asset.setXY(planet4, game.planet4.sideX, game.planet4.sideY);
+    asset.setXY(planet5, game.planet5.sideX, game.planet5.sideY);
+
+    app.currentTerm = app.limitTerm;
+    retake_number++;
+    AddScore();
+    rocketTweenClear();
 }
 
 /**
@@ -172,11 +233,14 @@ function handleComplete(event) {
     star.name = game.star.name;
     stage.addChild(star);
 
-    var planet1 = asset.createAssets(queue.getResult('planet1'), game.planet1.x, game.planet1.y);
-    var planet2 = asset.createAssets(queue.getResult('planet2'), game.planet2.x, game.planet2.y);
-    var planet3 = asset.createAssets(queue.getResult('planet3'), game.planet3.x, game.planet3.y);
-    var planet4 = asset.createAssets(queue.getResult('planet4'), game.planet4.x, game.planet4.y);
-    var planet5 = asset.createAssets(queue.getResult('planet5'), game.planet5.x, game.planet5.y);
+    var planet1 = asset.createAssets(queue.getResult('planet1'), game.planet1.sideX, game.planet1.sideY);
+    var planet2 = asset.createAssets(queue.getResult('planet2'), game.planet2.sideX, game.planet2.sideY);
+    var planet3 = asset.createAssets(queue.getResult('planet3'), game.planet3.sideX, game.planet3.sideY);
+    var planet4 = asset.createAssets(queue.getResult('planet4'), game.planet4.sideX, game.planet4.sideY);
+    var planet5 = asset.createAssets(queue.getResult('planet5'), game.planet5.sideX, game.planet5.sideY);
+
+    // 残機
+    var player = 
 
     planet1.name = game.planet1.name;
     planet2.name = game.planet2.name;
@@ -184,107 +248,131 @@ function handleComplete(event) {
     planet4.name = game.planet4.name;
     planet5.name = game.planet5.name;
 
-	//スコア表示 lisaco
-	score1.font = "bold 30px Impact";
-	score1.color = "#ff7000";
-	score1.text = "score：" + ("0000" + scoretxt).slice(-4);
-	score1.x = 560;
-	score1.y = 50;	
+    //スコア表示 lisaco
+    score1.font = "bold 30px Impact";
+    score1.color = "#ff7000";
+    score2.font = "bold 30px Impact";
+	score2.color = "#ff7000";
 
-	//初期びーじーえむ lisaco
-	var bgminstance = createjs.Sound.createInstance('bgm_thinking');
-	bgminstance.play('none', 0, 0, -1, 1, 0);
-	
-    var bitmap = new createjs.Bitmap(queue.getResult('space'));
-    
-    stage.addChildAt(bitmap, 1);
-    
+    score1.x = 560;
+	score1.y = 25;	
+    score2.x = 655;
+	score2.y = 75;
+    AddScore();
+
+    //初期びーじーえむ lisaco
+    var bgminstance = createjs.Sound.createInstance('bgm_thinking');
+    bgminstance.play('none', 0, 0, -1, 1, 0);
+
+    var space = new createjs.Bitmap(queue.getResult('space'));
+    space.name = 'space';
+    stage.addChildAt(space, 1);
+
     stage.addChild(planet1);
     stage.addChild(planet2);
     stage.addChild(planet3);
     stage.addChild(planet4);
     stage.addChild(planet5);
-	stage.addChild(score1);
+    stage.addChild(score1);
+    stage.addChild(score2)
 
-    planet1.on("pressmove", function(evt) {
-    evt.target.x = evt.stageX;
-    evt.target.y = evt.stageY;
-    AddScore();	//点数アップ関数！ lisaco
+    planet1.on("pressmove", function (evt) {
+        evt.target.x = evt.stageX;
+        evt.target.y = evt.stageY;
+        AddScore();	//点数アップ関数！ lisaco
     });
-    planet1.on("pressup", function(evt) { console.log("up"); })
 
-    planet2.on("pressmove", function(evt) {
-    evt.target.x = evt.stageX;
-    evt.target.y = evt.stageY;
-    AddScore();	//点数アップ関数！ lisaco
-    });
-    planet2.on("pressup", function(evt) { console.log("up"); })
+    planet1.on("pressup", planetPressUp);
 
-    planet3.on("pressmove", function(evt) {
-    evt.target.x = evt.stageX;
-    evt.target.y = evt.stageY;
-    AddScore();	//点数アップ関数！ lisaco
+    planet2.on("pressmove", function (evt) {
+        evt.target.x = evt.stageX;
+        evt.target.y = evt.stageY;
+        AddScore();	//点数アップ関数！ lisaco
     });
-    planet5.on("pressup", function(evt) { console.log("up"); })
+    planet2.on("pressup", planetPressUp);
 
-    planet4.on("pressmove", function(evt) {
-    evt.target.x = evt.stageX;
-    evt.target.y = evt.stageY;
-    AddScore();	//点数アップ関数！ lisaco
+    planet3.on("pressmove", function (evt) {
+        evt.target.x = evt.stageX;
+        evt.target.y = evt.stageY;
+        AddScore();	//点数アップ関数！ lisaco
     });
-    planet4.on("pressup", function(evt) { console.log("up"); })
 
-    planet5.on("pressmove", function(evt) {
-    evt.target.x = evt.stageX;
-    evt.target.y = evt.stageY;
-    AddScore();	//点数アップ関数！ lisaco
+    planet3.on("pressup", planetPressUp);
+
+    planet4.on("pressmove", function (evt) {
+        evt.target.x = evt.stageX;
+        evt.target.y = evt.stageY;
+        AddScore();	//点数アップ関数！ lisaco
     });
-    planet5.on("pressup", function(evt) { console.log("up"); })
-    
-	rocket.on("click", function(evt) {
-    	bgminstance.stop();
-    	rocketClick();
+
+    planet4.on("pressup", planetPressUp);
+
+    planet5.on("pressmove", function (evt) {
+        evt.target.x = evt.stageX;
+        evt.target.y = evt.stageY;
+        AddScore();	//点数アップ関数！ lisaco
     });
-    
+
+    planet5.on("pressup", planetPressUp);
+
+    rocket.on("click", function (evt) {
+        bgminstance.stop();
+        rocketClick();
+    });
+
 }
 
-var frames = {
-    frames: [
-        {
-            x: 259 - 10,
-            y: 668 - 10,
-            speed: 0,
-            direction: 0
-        },
-        {
-            x: 259 - 130,
-            y: 668 - 10,
-            speed: 0,
-            direction: 180
-        },
-        {
-            x: 259 - 10,
-            y: 668 + 40,
-            speed: 0,
-            direction: 270
-        },
-        {
-            x: 259 - 110,
-            y: 668 - 10,
-            speed: 0,
-            direction: 360
-        }
-    ]
-};
+/**
+ * 星をドラッグから外した場合にコール
+ */
+function planetPressUp(evt) {
+    if (isHitSidebar(evt.target)) {
+        createjs.Tween
+            .get(evt.target, {loop: false})
+            .to({x: game[evt.target.name].sideX, y: game[evt.target.name].sideY}, 300);
+    }
+}
 
-function tweenTest() {
+/**
+ * サイドバーへの当たり判定
+ * @param item
+ */
+function isHitSidebar(item) {
+    var sidebar = stage.getChildByName('sidebar');
+    var point = item.localToLocal(0, 0, sidebar);   // 相対座標
+    var isHit = sidebar.hitTest(point.x, point.y);  // サイドバーへの判定
+
+    console.log(item.name + ' Hit?', isHit);
+    return isHit;
+}
+
+/**
+ * rocketの移動
+ * {
+ *     x: 0,
+ *     y: 0,
+ *     speed: 0,
+ *     direction: 0
+ * }
+ * @param data
+ */
+function goRocket(data) {
     var rocket = stage.getChildByName(game.rocket.name);
-    var tween = createjs.Tween.get(rocket, { loop: false });
-    for (var i = 0, len = frames.frames.length; i < len; i++) {
-        var item = frames.frames[i];
-        tween.to({x: item.x, y: item.y, rotation: item.direction}, 1000)
+    var tween = createjs.Tween.get(rocket, {loop: false});
+    for (var i = 0, len = data.frames.length; i < len; i++) {
+        var item = data.frames[i];
+        tween.to({x: item.x, y: item.y, rotation: -item.direction - 270}, 8)
             .call(onOneSecond);
     }
+    tween.call(onOneFinish, [data.frames[len - 1]]);
+}
+
+/**
+ * rocketのアニメーションを削除する
+ */
+function rocketTweenClear() {
+    var rocket = stage.getChildByName(game.rocket.name);
+    createjs.Tween.removeTweens(rocket);
 }
 
 /**
@@ -296,72 +384,117 @@ function onOneSecond(e) {
     console.log('onOnSecond', e.target.x, e.target.y);
 }
 
+function onOneFinish(lastFrame) {
+    console.log('onOneFinish', lastFrame);
+    if (app.currentTerm < app.limitTerm) {
+        app.currentTerm++;
+        request(lastFrame);
+    }
+}
+
 
 /**
- * 通信開始
+ * 開始ボタン
  * @param event
  */
-function request(event) {
-    setTimeout(tweenTest, 1000);
-    axios.post('/test', {
-        starship: {
-            x : 100,
-            y : 100,
-            speed : 10,
-            direction : 45
-        },
-        stars :[
-            {
-                x : 10,
-                y : 20,
-                gravity : 5
-            },
-            {
-                x : 40,
-                y : 50,
-                gravity : 2
-            }
-        ],
-        stageinfo : {
-            id : 1,
-            name : "stage01"
+function onClickStart(event) {
+    time_start = app.deltaTime;
+    app.currentTerm = 0;
+    flag_start = true;
+    rocketTweenClear();
+    request();
+}
+
+function request(lastFrame) {
+    var p1 = stage.getChildByName(game.planet1.name);
+    var p2 = stage.getChildByName(game.planet2.name);
+    var p3 = stage.getChildByName(game.planet3.name);
+    var p4 = stage.getChildByName(game.planet4.name);
+    var p5 = stage.getChildByName(game.planet5.name);
+    var ps = [p1, p2, p3, p4, p5];
+    var stars = [{
+        x: game.star.x,
+        y: game.star.y,
+        gravity: game.star.gravity
+    }];
+
+    for (var i=0, len=ps.length; i < len; i++) {
+        if (isHitSidebar(ps[i]) === false) {
+            stars.push({
+                x: ps[i].x,
+                y: ps[i].y,
+                gravity: game['planet' + (i + 1)].gravity
+            });
         }
-    })
-    .then(function (response) {
-        console.log(response);
-    })
-    .catch(function (error) {
-        console.error(error);
-    });
+    }
+
+    // スタート初期値
+    var starship = {
+        x: 259,
+        y: 700,
+        speed: 1,
+        direction: 90
+    };
+
+    // ゲーム中なら最後のフレーム情報を渡す
+    if (!!lastFrame) {
+        starship.x = Number(lastFrame.x);
+        starship.y = Number(lastFrame.y);
+        starship.speed = Number(lastFrame.speed);
+        starship.direction = Number(lastFrame.direction);
+    }
+
+    axios.post(app.basePath + '/startgame', {
+            "starship": starship,
+            "stars": stars,
+            "stageinfo": {
+                "id": 1,
+                "name": "stage01"
+            }
+        }
+    )
+        .then(function (response) {
+            console.log(response);
+            goRocket(response.data);
+        })
+        .catch(function (error) {
+            console.error(error);
+        });
 }
 
 /**
  * 点数追加したいねん lisaco
  */
 function AddScore() {
-	 scoretxt = scoretxt + 1;
-	score1.text = "score：" + ("0000" + scoretxt).slice(-4);
+     score1.text = "Time: " + parseInt((time_limit - (time_current / 1000)));
+     score2.text = "" + (retake_limit - retake_number);
+    if((time_limit - (time_current / 1000)) <= 0 || (retake_limit - retake_number) <= 0){
+        localStorage.setItem("Score",(time_limit - (time_current / 1000)) + ((retake_limit - retake_number)*100) );
+        window.location.href = 'gameover.html';
+    }
+	 
+     //score1.text = "score：" + ("0000" + scoretxt).slice(-4);
 }
 
 /**
  * ロケットくりっく！ lisaco
  */
- function rocketClick(event){
- 	//ロケット発射！
- 	var rocketinstance = createjs.Sound.createInstance('se_rocket');
-	rocketinstance.play('none', 0, 0, 0, 1, 0);
- 
-	//びーじーえむ
-	//var bgminstance = createjs.Sound.createInstance('bgm');
-	//bgminstance.play('none', 0, 0, 0, 1, 0);
- }
+function rocketClick(event) {
+    //ロケット発射！
+    var rocketinstance = createjs.Sound.createInstance('se_rocket');
+    rocketinstance.play('none', 0, 0, 0, 1, 0);
+
+    //びーじーえむ
+    //var bgminstance = createjs.Sound.createInstance('bgm');
+    //bgminstance.play('none', 0, 0, 0, 1, 0);
+}
 
 // ゲームオーバーイベント
 
 //function gameOver(event){
-    // if(衝突の条件){
-    //  window.location.href = './gameover.html'; // 通常の遷移
+// if(衝突の条件){
+//  window.location.href = './gameover.html'; // 通常の遷移
 
-    // }
-    
- //}
+// }
+
+//}
