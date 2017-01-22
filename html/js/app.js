@@ -36,10 +36,13 @@ queue.loadManifest([
     {id: "planet4", src: 'assets/images/planet2.png'},
     {id: "planet5", src: 'assets/images/planet3.png'},
     {id: "space", src: 'assets/images/Space_view.jpg'},
+    {id: "go",src: 'assets/images/go.png'},
+    {id: "reset",src: 'assets/images/reset.png'},
     //bgm 呼び出してるよ lisaco
     {id: "bgm", src: 'assets/sounds/bgm.mp3'},
     {id: "bgm_thinking", src: 'assets/sounds/bgm_thinking.mp3'},
     {id: "se_rocket", src: 'assets/sounds/se_rocket.mp3'}
+    
 ]);
 
 var setting = {
@@ -170,14 +173,15 @@ function init(event) {
     stage.addChild(background);
     stage.addChild(sidebar);
 
-    var button = asset.createButton('開始', 100, 30);
-    button.addEventListener("click", onClickStart);
-    stage.addChild(button);
+    //var button = asset.createButton('', 100, 30);
+    //button.addEventListener("click", onClickStart);
+    //stage.addChild(button);
+    
 
-    var reset = asset.createButton('リセット', 100, 30);
-    reset.y = 40;
-    reset.addEventListener("click", resetAll);
-    stage.addChild(reset);
+    //var reset = asset.createButton('', 100, 30);
+    //reset.y = 40;
+    //reset.addEventListener("click", resetAll);
+    //stage.addChild(reset);
 
     createjs.Ticker.setFPS(60);
     createjs.Ticker.addEventListener('tick', function (e) {
@@ -238,9 +242,16 @@ function handleComplete(event) {
     var planet3 = asset.createAssets(queue.getResult('planet3'), game.planet3.sideX, game.planet3.sideY);
     var planet4 = asset.createAssets(queue.getResult('planet4'), game.planet4.sideX, game.planet4.sideY);
     var planet5 = asset.createAssets(queue.getResult('planet5'), game.planet5.sideX, game.planet5.sideY);
+    
+    var go = asset.createAssets(queue.getResult('go'),50,15); 
+    go.addEventListener("click", onClickStart);
+    go.name = 'go';
+    stage.addChild(go);
 
-    // 残機
-    var player = 
+    var reset = asset.createAssets(queue.getResult('reset'),470,15); 
+    reset.addEventListener("click", resetAll);
+    stage.addChild(reset);
+
 
     planet1.name = game.planet1.name;
     planet2.name = game.planet2.name;
@@ -278,6 +289,7 @@ function handleComplete(event) {
     stage.addChild(player1);
     stage.addChild(player2);
     stage.addChild(player3);
+    
 
     planet1.on("pressmove", function (evt) {
         evt.target.x = evt.stageX;
@@ -401,9 +413,11 @@ function onOneFinish(lastFrame) {
  * @param event
  */
 function onClickStart(event) {
+    var go = stage.getChildByName('go');
     time_start = app.deltaTime;
     app.currentTerm = 0;
     flag_start = true;
+    go.visible = false;
     rocketTweenClear();
     request();
 }
