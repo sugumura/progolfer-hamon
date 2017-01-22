@@ -140,12 +140,6 @@ var asset = {
     }
 };
 
-// playerShip
- // var player1 = asset.createAssets(queue.getResult('player1'), 600, 62.5);
-
-// stage.addChild(player1);
-
-
 /**
  * 初期化
  * @param event
@@ -204,6 +198,8 @@ function resetAll() {
     asset.setXY(planet4, game.planet4.sideX, game.planet4.sideY);
     asset.setXY(planet5, game.planet5.sideX, game.planet5.sideY);
 
+    var go = stage.getChildByName('go');
+    go.visible = true;
     app.currentTerm = app.limitTerm;
     retake_number++;
     AddScore();
@@ -423,10 +419,15 @@ function onOneFinish(lastFrame) {
 function onClickStart(event) {
     detachPlanetEvent();
     var go = stage.getChildByName('go');
-    time_start = app.deltaTime;
-    app.currentTerm = 0;
-    flag_start = true;
     go.visible = false;
+    if(flag_start == false){
+        time_start = app.deltaTime;
+        flag_start = true;
+    }
+    
+    app.currentTerm = 0;
+    
+    
     rocketTweenClear();
     request();
 }
