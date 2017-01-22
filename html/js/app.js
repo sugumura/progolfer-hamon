@@ -3,6 +3,7 @@
 document.addEventListener("DOMContentLoaded", init);
 
 var app = window.app || {};
+app.isGameClear = false;
 app.basePath = 'http://ggj2017kumamoto2f-env.ap-northeast-1.elasticbeanstalk.com';
 app.limitTerm = 10; // 10ターム
 app.currentTerm = 0;    // 現在のターム
@@ -345,6 +346,16 @@ function isHitSidebar(item) {
 }
 
 /**
+ * AとBのヒットテスト
+ * @param a
+ * @param b
+ */
+function isHitTest(a, b) {
+    var point = a.localToLocal(60, 60, b);
+    return b.hitTest(point.x, point.y);
+}
+
+/**
  * rocketの移動
  * {
  *     x: 0,
@@ -360,7 +371,7 @@ function goRocket(data) {
     for (var i = 0, len = data.frames.length; i < len; i++) {
         var item = data.frames[i];
         tween.to({x: item.x, y: item.y, rotation: -item.direction - 270}, 8)
-            .call(onOneSecond);
+            .call(onOneSecond, [rocket]);
     }
     tween.call(onOneFinish, [data.frames[len - 1]]);
 }
@@ -376,10 +387,14 @@ function rocketTweenClear() {
 /**
  * 1秒毎のフレーム後にコール
  * 障害物判定などに利用する
- * @param e
+ * @param rocket
  */
-function onOneSecond(e) {
-    console.log('onOnSecond', e.target.x, e.target.y);
+function onOneSecond(rocket) {
+    var star = stage.getChildByName(game.star.name);
+    var isHit = isHitTest(rocket, star);
+    if (isHit) {
+        gameClear();
+    }
 }
 
 function onOneFinish(lastFrame) {
@@ -401,6 +416,15 @@ function onClickStart(event) {
     flag_start = true;
     rocketTweenClear();
     request();
+}
+
+function gameClear() {
+    if (app.isGameClear === true) return;
+    app.isGameClear = true;
+    app.currentTerm = app.limitTerm;
+    rocketTweenClear();
+
+    alert("星についたよ");
 }
 
 function request(lastFrame) {
