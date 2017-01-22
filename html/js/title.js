@@ -8,24 +8,25 @@ queue.installPlugin(createjs.Sound);
 queue.on("complete", handleComplete, this);
 
 queue.loadManifest([
-    {id: "space", src: 'assets/images/Space_view.jpg'},
-    {id: "titlelogo", src: 'assets/images/Titlelogo.png'},
+    { id: "space", src: 'assets/images/Space_view.jpg' },
+    { id: "titlelogo", src: 'assets/images/Titlelogo.png' },
     //bgm 呼び出してるよ lisaco
-	{id: "bgm_title", src: 'assets/sounds/bgm_title.mp3'}
+    { id: "bgm_title", src: 'assets/sounds/bgm_title.mp3' },
+    // { id: "se_rocket", src: 'assets/sounds/se_rocket.mp3' }
 ]);
 
 var setting = {
-    sidebar: function () {
+    sidebar: function() {
         var side = new createjs.Shape();
         side.graphics.beginFill("Grey").drawRect(518, 0, 250, 768);
         side.x = 0;
         side.y = 0;
         return side;
-    }    
+    }
 };
 
 var asset = {
-    createAssets: function (resource, x, y) {
+    createAssets: function(resource, x, y) {
         var bitmap = new createjs.Bitmap(resource);
         // アンカーを中心にする
         bitmap.regX = bitmap.getBounds().width / 2;
@@ -49,7 +50,7 @@ function init(event) {
     stage.addChild(sidebar);
 
     createjs.Ticker.setFPS(30);
-    createjs.Ticker.addEventListener('tick', function(e){
+    createjs.Ticker.addEventListener('tick', function(e) {
         // console.log(e);
         stage.update();
     });
@@ -60,27 +61,47 @@ function init(event) {
  * @param event
  */
 function handleComplete(event) {
-    console.log("test",event);
+    console.log("test", event);
     // var titlelogo = asset.createAssets(queue.getResult('titlelogo'), 259, 192);    
     var bitmap = new createjs.Bitmap(queue.getResult('space'));
-    
-     //初期びーじーえむ lisaco
-	var bgminstance = createjs.Sound.createInstance('bgm_title');
-	bgminstance.play('none', 0, 0, -1, 0.5, 0);
-    bgminstance.stop();
 
-        // アンカーを中心にする
-        bitmap.x = 0;
-        bitmap.y = 0;
+    //初期びーじーえむ lisaco
+    var bgminstance = createjs.Sound.createInstance('bgm_title');
+    bgminstance.play('none', 0, 0, -1, 0.5, 0);
+
+    // アンカーを中心にする
+    bitmap.x = 0;
+    bitmap.y = 0;
 
     stage.addChildAt(bitmap, 1);
     // stage.addChild(titlelogo);
-    
- }
 
-function test (event){
-     // body...
-     if (onClick('titlelogo')) {
+
+    setTimeout(function() {
+        var start = document.getElementById("startimg");
+        start.style.display = "block";
+    }, 4000)
+    
+    // start.on("click", function(evt) {
+    //     bgminstance.stop();
+    //     startClick();
+    // });
+
+}
+
+function test(event) {
+    // body...
+    if (onClick('titlelogo')) {
         window.location.href = './gameover.html'; // 通常の遷移
-     };
- } 
+    };
+}
+
+// function startClick(event) {
+//     //ロケット発射！
+//     var startinstance = createjs.Sound.createInstance('se_rocket');
+//     startinstance.play('none', 0, 0, 0, 1, 0);
+
+//     //びーじーえむ
+//     //var bgminstance = createjs.Sound.createInstance('bgm');
+//     //bgminstance.play('none', 0, 0, 0, 1, 0);
+// }
