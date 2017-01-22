@@ -16,15 +16,17 @@ queue.on("complete", handleComplete, this);
 //スコア変数 lisaco
 var score1 = new createjs.Text();
 var scoretxt;
+var playerShip = 62.5;
+var stone = 120;
 
 queue.loadManifest([
     {id: "rocket", src: 'assets/images/rocket.png'},
     {id: "star", src: 'assets/images/star.png'},
-    {id: "planet1", src: 'assets/images/planet1.png'},
-    {id: "planet2", src: 'assets/images/planet2.png'},
-    {id: "planet3", src: 'assets/images/planet3.png'},
-    {id: "planet4", src: 'assets/images/planet4.png'},
-    {id: "planet5", src: 'assets/images/planet5.png'},
+    {id: "planet1", src: 'assets/images/planet5.png'},
+    {id: "planet2", src: 'assets/images/planet4.png'},
+    {id: "planet3", src: 'assets/images/planet1.png'},
+    {id: "planet4", src: 'assets/images/planet2.png'},
+    {id: "planet5", src: 'assets/images/planet3.png'},
     {id: "space", src: 'assets/images/Space_view.jpg'},
     //bgm 呼び出してるよ lisaco
 	{id: "bgm", src: 'assets/sounds/bgm.mp3'},
@@ -76,31 +78,49 @@ var game = {
         name: 'planet1',
         gravity: 0.01,
         sideX: 643,
-        sideY: 668
+        sideY: 650
     },
     planet2: {
         name: 'planet2',
         gravity: 0.005,
         sideX: 643,
-        sideY: 668 - 120
+        sideY: 668 - 160
     },
     planet3: {
         name: 'planet3',
         gravity: 0.0025,
         sideX: 643,
-        sideY: 668 - 120 * 2
+        sideY: 668 - 140 * 2
     },
     planet4: {
         name: 'planet4',
         gravity: 0.00125,
         sideX: 643,
-        sideY: 668 - 120 * 3
+        sideY: 668 - 130 * 3
     },
     planet5: {
         name: 'planet5',
         gravity: 0.0006125,
         sideX: 643,
         sideY: 668 - 120 * 4
+    },
+    player1: {
+        name: 'player',
+        gravity: 0,
+        sideX: 518 + playerShip,
+        sideY: 680
+    },
+    player2: {
+        name: 'player',
+        gravity: 0,
+        sideX: 518 + playerShip * 2,
+        sideY: 680
+    },
+    player3: {
+        name: 'player',
+        gravity: 0,
+        sideX: 518 + playerShip * 3,
+        sideY: 680
     }
 };
 
@@ -206,6 +226,9 @@ function handleComplete(event) {
     var planet3 = asset.createAssets(queue.getResult('planet3'), game.planet3.sideX, game.planet3.sideY);
     var planet4 = asset.createAssets(queue.getResult('planet4'), game.planet4.sideX, game.planet4.sideY);
     var planet5 = asset.createAssets(queue.getResult('planet5'), game.planet5.sideX, game.planet5.sideY);
+
+    // 残機
+    var player = 
 
     planet1.name = game.planet1.name;
     planet2.name = game.planet2.name;
