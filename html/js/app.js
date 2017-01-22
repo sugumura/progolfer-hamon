@@ -212,7 +212,7 @@ function resetAll() {
     retake_number++;
     AddScore();
     rocketTweenClear();
-    tachPlanetEvent();
+    touchPlanetEvent();
 }
 
 /**
@@ -238,6 +238,7 @@ function handleComplete(event) {
 
     // 隕石
     var meteor1 = asset.createAssets(queue.getResult(game.meteor1.name), game.meteor1.x, game.meteor1.y);
+    meteor1.name = game.meteor1.name;
     stage.addChild(meteor1);
 
     // 隕石アニメーション
@@ -316,7 +317,10 @@ function handleComplete(event) {
 
 }
 
-function detachPlanetEvent() {
+/**
+ * 惑星のイベント処理削除
+ */
+function detouchPlanetEvent() {
     var planet1 = stage.getChildByName(game.planet1.name);
     var planet2 = stage.getChildByName(game.planet2.name);
     var planet3 = stage.getChildByName(game.planet3.name);
@@ -329,7 +333,10 @@ function detachPlanetEvent() {
     planet5.removeEventListener("pressmove", planetPressMove);
 }
 
-function tachPlanetEvent () {
+/**
+ * 惑星のイベント処理追加
+ */
+function touchPlanetEvent () {
     var planet1 = stage.getChildByName(game.planet1.name);
     var planet2 = stage.getChildByName(game.planet2.name);
     var planet3 = stage.getChildByName(game.planet3.name);
@@ -343,6 +350,10 @@ function tachPlanetEvent () {
  
 }
 
+/**
+ * 惑星をドラッグアンドドロップさせる
+ * @param evt
+ */
 function planetPressMove(evt) {
     evt.target.x = evt.stageX;
     evt.target.y = evt.stageY;
@@ -423,6 +434,13 @@ function onOneSecond(rocket) {
     if (isHit) {
         gameClear();
     }
+
+    var meteor = stage.getChildByName(game.meteor1.name);
+    var meteorHit = isHitTest(rocket, meteor);
+    if (meteorHit) {
+        console.log(meteor.name + ' HIT!!');
+        crashMeteor();
+    }
 }
 
 function onOneFinish(lastFrame) {
@@ -440,7 +458,7 @@ function onOneFinish(lastFrame) {
  */
 function onClickStart(event) {
     var go = stage.getChildByName('go');
-    detachPlanetEvent();
+    detouchPlanetEvent();
     go.visible = false;
     if(flag_start == false){
         time_start = app.deltaTime;
@@ -457,6 +475,16 @@ function onClickStart(event) {
     request();
 }
 
+/**
+ * 隕石にぶつかった時
+ */
+function crashMeteor() {
+    resetAll();
+}
+
+/**
+ * ゲームクリア
+ */
 function gameClear() {
     if (app.isGameClear === true) return;
     app.isGameClear = true;
@@ -466,6 +494,10 @@ function gameClear() {
     alert("星についたよ");
 }
 
+/**
+ * 通信処理
+ * @param lastFrame
+ */
 function request(lastFrame) {
     var p1 = stage.getChildByName(game.planet1.name);
     var p2 = stage.getChildByName(game.planet2.name);
