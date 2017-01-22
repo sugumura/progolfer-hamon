@@ -453,6 +453,7 @@ function AddScore() {
      score1.text = "Time: " + parseInt((time_limit - (time_current / 1000)));
      score2.text = "" + (retake_limit - retake_number);
     if((time_limit - (time_current / 1000)) <= 0 || (retake_limit - retake_number) <= 0){
+        localStorage.setItem("Score",(time_limit - (time_current / 1000)) + ((retake_limit - retake_number)*100) );
         window.location.href = 'gameover.html';
     }
 	 
