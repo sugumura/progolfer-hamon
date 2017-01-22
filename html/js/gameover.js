@@ -9,8 +9,8 @@ queue.on("complete", handleComplete, this);
 
 queue.loadManifest([
     {id: "space", src: 'assets/images/Space_view.jpg'},
-    {id: "gameover", src: 'assets/images/gameover.png'}
-
+    {id: "gameover", src: 'assets/images/gameover.png'},
+    {id: "se_rocket", src: 'assets/sounds/se_rocket.mp3'}
 ]);
 
 var setting = {
@@ -28,10 +28,7 @@ var setting = {
         side.y = 0;
         return side;
     }
-    // start_Button: function (){
-    //     var start = new createsjs.Shape();
-
-
+   
     
 
 };
@@ -78,10 +75,13 @@ function handleComplete(event) {
     console.log("test",event);
         var bitmap = new createjs.Bitmap(queue.getResult('space'));
         var gameover = asset.createAssets(queue.getResult('gameover'), 259, 192);
+        var bgminstance = createjs.Sound.createInstance('se_rocket');
+        bgminstance.play('none', 0, 0, -1, 0.5, 0);   
+
         // アンカーを中心にする
         bitmap.x = 0;
         bitmap.y = 0;
-        gameover.addEventListener("click", test);
+        // gameover.addEventListener("click", test);
     stage.addChildAt(bitmap,1);
 
  }
