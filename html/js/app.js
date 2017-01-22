@@ -4,7 +4,10 @@ document.addEventListener("DOMContentLoaded", init);
 
 var app = window.app || {};
 app.basePath = 'http://ggj2017kumamoto2f-env.ap-northeast-1.elasticbeanstalk.com';
-var stage;
+app.limitTerm = 10; // 10ターム
+app.currentTerm = 0;    // 現在のターム
+
+var stage;  // 画面オブジェクト
 
 var queue = new createjs.LoadQueue();
 queue.installPlugin(createjs.Sound);
@@ -144,7 +147,7 @@ function init(event) {
     stage.addChild(sidebar);
 
     var button = asset.createButton('開始', 100, 30);
-    button.addEventListener("click", request);
+    button.addEventListener("click", onClickStart);
     stage.addChild(button);
 
     var reset = asset.createButton('リセット', 100, 30);
@@ -179,6 +182,9 @@ function resetAll() {
     asset.setXY(planet3, game.planet3.sideX, game.planet3.sideY);
     asset.setXY(planet4, game.planet4.sideX, game.planet4.sideY);
     asset.setXY(planet5, game.planet5.sideX, game.planet5.sideY);
+
+    app.currentTerm = app.limitTerm;
+    rocketTweenClear();
 }
 
 /**
@@ -285,35 +291,6 @@ function handleComplete(event) {
     
 }
 
-// var frames = {
-//     frames: [
-//         {
-//             x: 259 - 10,
-//             y: 668 - 10,
-//             speed: 0,
-//             direction: 0
-//         },
-//         {
-//             x: 259 - 130,
-//             y: 668 - 10,
-//             speed: 0,
-//             direction: 180
-//         },
-//         {
-//             x: 259 - 10,
-//             y: 668 + 40,
-//             speed: 0,
-//             direction: 270
-//         },
-//         {
-//             x: 259 - 110,
-//             y: 668 - 10,
-//             speed: 0,
-//             direction: 360
-//         }
-//     ]
-// };
-
 /**
  * rocketの移動
  * {
@@ -332,7 +309,12 @@ function goRocket(data) {
         tween.to({x: item.x, y: item.y, rotation: -item.direction - 270}, 8)
             .call(onOneSecond);
     }
-    // tween.call(onOneFinish, [data.frames[len]]);
+    tween.call(onOneFinish, [data.frames[len - 1]]);
+}
+
+function rocketTweenClear() {
+    var rocket = stage.getChildByName(game.rocket.name);
+    createjs.Tween.removeTweens(rocket);
 }
 
 /**
@@ -344,15 +326,26 @@ function onOneSecond(e) {
     console.log('onOnSecond', e.target.x, e.target.y);
 }
 
-function onOneFinish(e) {
-    console.log('onOneFinish');
+function onOneFinish(lastFrame) {
+    console.log('onOneFinish', lastFrame);
+    if (app.currentTerm < app.limitTerm) {
+        app.currentTerm++;
+        request(lastFrame);
+    }
 }
 
+
 /**
- * 通信開始
+ * 開始ボタン
  * @param event
  */
-function request(event) {
+function onClickStart(event) {
+    app.currentTerm = 0;
+    rocketTweenClear();
+    request();
+}
+
+function request(lastFrame) {
     var p1 = stage.getChildByName(game.planet1.name);
     var p2 = stage.getChildByName(game.planet2.name);
     var p3 = stage.getChildByName(game.planet3.name);
@@ -392,13 +385,24 @@ function request(event) {
         gravity: game.planet5.gravity
     });
 
+    // スタート初期値
+    var starship = {
+        x: 259,
+        y: 700,
+        speed: 1,
+        direction: 90
+    };
+
+    // ゲーム中なら最後のフレーム情報を渡す
+    if (!!lastFrame) {
+        starship.x = Number(lastFrame.x);
+        starship.y = Number(lastFrame.y);
+        starship.speed = Number(lastFrame.speed);
+        starship.direction = Number(lastFrame.direction);
+    }
+
     axios.post(app.basePath + '/startgame', {
-            "starship" : {
-                "x" : 259,
-                "y" : 700,
-                "speed" : 1,
-                "direction" : 90
-            },
+            "starship" : starship,
             "stars" : stars,
             "stageinfo" : {
                 "id" : 1,
