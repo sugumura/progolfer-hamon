@@ -44,7 +44,7 @@ class ProgolferHamon:
         self.__Meteos = meteolist
     def get_Meteos(self):
         return self.__Meteos
-    Meteos=property(get_meteos,set_Meteos)
+    Meteos=property(get_Meteos,set_Meteos)
 
     def createPositionData(self):
         self.Frames=None
