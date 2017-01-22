@@ -6,6 +6,7 @@ var app = window.app || {};
 app.basePath = 'http://ggj2017kumamoto2f-env.ap-northeast-1.elasticbeanstalk.com';
 app.limitTerm = 10; // 10ターム
 app.currentTerm = 0;    // 現在のターム
+app.deltaTime = 0;
 
 var stage;  // 画面オブジェクト
 
@@ -15,7 +16,14 @@ queue.on("complete", handleComplete, this);
 
 //スコア変数 lisaco
 var score1 = new createjs.Text();
+var score2 = new createjs.Text();
 var scoretxt;
+var retake_limit = 10;
+var retake_number = 0;
+var time_limit = 180;
+var time_current = 0 ;
+var time_start = 0;
+var flag_start = false;
 
 queue.loadManifest([
     {id: "rocket", src: 'assets/images/rocket.png'},
@@ -159,6 +167,12 @@ function init(event) {
     createjs.Ticker.addEventListener('tick', function(e){
         // console.log(e);
         stage.update();
+        app.deltaTime += e.delta;
+        if(flag_start == true){
+            time_current = app.deltaTime - time_start;
+            AddScore();
+        }
+        
     });
 }
 
@@ -184,6 +198,8 @@ function resetAll() {
     asset.setXY(planet5, game.planet5.sideX, game.planet5.sideY);
 
     app.currentTerm = app.limitTerm;
+    retake_number++;
+    AddScore();
     rocketTweenClear();
 }
 
@@ -216,9 +232,14 @@ function handleComplete(event) {
 	//スコア表示 lisaco
 	score1.font = "bold 30px Impact";
 	score1.color = "#ff7000";
-	score1.text = "score：" + ("0000" + scoretxt).slice(-4);
-	score1.x = 560;
-	score1.y = 50;	
+    score2.font = "bold 30px Impact";
+	score2.color = "#ff7000";
+
+    score1.x = 560;
+	score1.y = 25;	
+    score2.x = 655;
+	score2.y = 75;
+    AddScore();
 
 	//初期びーじーえむ lisaco
 	var bgminstance = createjs.Sound.createInstance('bgm_thinking');
@@ -234,6 +255,7 @@ function handleComplete(event) {
     stage.addChild(planet4);
     stage.addChild(planet5);
 	stage.addChild(score1);
+    stage.addChild(score2)
 
     planet1.on("pressmove", function(evt) {
     evt.target.x = evt.stageX;
@@ -309,7 +331,9 @@ function goRocket(data) {
         tween.to({x: item.x, y: item.y, rotation: -item.direction - 270}, 8)
             .call(onOneSecond);
     }
+    
     tween.call(onOneFinish, [data.frames[len - 1]]);
+    
 }
 
 function rocketTweenClear() {
@@ -323,6 +347,7 @@ function rocketTweenClear() {
  * @param e
  */
 function onOneSecond(e) {
+    
     console.log('onOnSecond', e.target.x, e.target.y);
 }
 
@@ -340,7 +365,9 @@ function onOneFinish(lastFrame) {
  * @param event
  */
 function onClickStart(event) {
+    time_start = app.deltaTime;
     app.currentTerm = 0;
+    flag_start = true;
     rocketTweenClear();
     request();
 }
@@ -423,8 +450,13 @@ function request(lastFrame) {
  * 点数追加したいねん lisaco
  */
 function AddScore() {
-	 scoretxt = scoretxt + 1;
-	score1.text = "score：" + ("0000" + scoretxt).slice(-4);
+     score1.text = "Time: " + parseInt((time_limit - (time_current / 1000)));
+     score2.text = "" + (retake_limit - retake_number);
+    if((time_limit - (time_current / 1000)) <= 0 || (retake_limit - retake_number) <= 0){
+        window.location.href = 'gameover.html';
+    }
+	 
+     //score1.text = "score：" + ("0000" + scoretxt).slice(-4);
 }
 
 /**
