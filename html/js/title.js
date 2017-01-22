@@ -66,7 +66,8 @@ function handleComplete(event) {
     
      //初期びーじーえむ lisaco
 	var bgminstance = createjs.Sound.createInstance('bgm_title');
-	bgminstance.play('none', 0, 0, -1, 0.5, 0);   
+	bgminstance.play('none', 0, 0, -1, 0.5, 0);
+    bgminstance.stop();
 
         // アンカーを中心にする
         bitmap.x = 0;
