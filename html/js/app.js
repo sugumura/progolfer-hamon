@@ -21,7 +21,7 @@ var score1 = new createjs.Text();
 var score2 = new createjs.Text();
 
 var playerShip = 62.5;
-var retake_limit = 10;
+var retake_limit = 3;
 var retake_number = 0;
 var time_limit = 180;
 var time_current = 0 ;
@@ -37,8 +37,11 @@ queue.loadManifest([
     {id: "planet4", src: 'assets/images/planet2.png'},
     {id: "planet5", src: 'assets/images/planet3.png'},
     {id: "space", src: 'assets/images/Space_view.jpg'},
+    {id: "meteor1",src: 'assets/images/meteor1.png'},
+    {id: "meteor2",src: 'assets/images/meteor2.png'},
     {id: "go",src: 'assets/images/go.png'},
     {id: "reset",src: 'assets/images/reset.png'},
+
     //bgm 呼び出してるよ lisaco
     {id: "bgm", src: 'assets/sounds/bgm.mp3'},
     {id: "bgm_thinking", src: 'assets/sounds/bgm_thinking.mp3'},
@@ -82,6 +85,11 @@ var game = {
         x: 259,
         y: 68,
         gravity: 0.1
+    },
+    meteor1: {  // 障害物
+        name: 'meteor1',
+        x: 259,
+        y: 350
     },
     planet1: {
         name: 'planet1',
@@ -142,12 +150,6 @@ var asset = {
     }
 };
 
-// playerShip
-// var player1 = asset.createAssets(queue.getResult('player1'), 680, 62.5);
-
-// stage.addChild(rocket);
-
-
 /**
  * 初期化
  * @param event
@@ -206,10 +208,13 @@ function resetAll() {
     asset.setXY(planet4, game.planet4.sideX, game.planet4.sideY);
     asset.setXY(planet5, game.planet5.sideX, game.planet5.sideY);
 
+    var go = stage.getChildByName('go');
+    go.visible = true;
     app.currentTerm = app.limitTerm;
     retake_number++;
     AddScore();
     rocketTweenClear();
+    touchPlanetEvent();
 }
 
 /**
@@ -226,12 +231,26 @@ function handleComplete(event) {
     star.name = game.star.name;
     stage.addChild(star);
 
+    // 惑星
     var planet1 = asset.createAssets(queue.getResult('planet1'), game.planet1.sideX, game.planet1.sideY);
     var planet2 = asset.createAssets(queue.getResult('planet2'), game.planet2.sideX, game.planet2.sideY);
     var planet3 = asset.createAssets(queue.getResult('planet3'), game.planet3.sideX, game.planet3.sideY);
     var planet4 = asset.createAssets(queue.getResult('planet4'), game.planet4.sideX, game.planet4.sideY);
     var planet5 = asset.createAssets(queue.getResult('planet5'), game.planet5.sideX, game.planet5.sideY);
-    
+
+    // 隕石
+    var meteor1 = asset.createAssets(queue.getResult(game.meteor1.name), game.meteor1.x, game.meteor1.y);
+    meteor1.name = game.meteor1.name;
+    stage.addChild(meteor1);
+
+    // 隕石アニメーション
+    createjs.Tween.get(meteor1, {loop: true})
+        .to({y: meteor1.y + 10, rotation: 0}, 1000)
+        .to({y: meteor1.y, rotation: 0}, 1000)
+        .to({y: meteor1.y - 10, rotation: 0}, 1000)
+        .to({y: meteor1.y, rotation: 0}, 1000);
+
+    // UI
     var go = asset.createAssets(queue.getResult('go'),50,15); 
     go.addEventListener("click", onClickStart);
     go.name = 'go';
@@ -279,49 +298,68 @@ function handleComplete(event) {
     stage.addChild(score1);
     stage.addChild(score2);
 
-    planet1.on("pressmove", function (evt) {
-        evt.target.x = evt.stageX;
-        evt.target.y = evt.stageY;
-        AddScore();	//点数アップ関数！ lisaco
-    });
+    planet1.addEventListener("pressmove", planetPressMove);
+    planet1.addEventListener("pressup", planetPressUp);
 
-    planet1.on("pressup", planetPressUp);
+    planet2.addEventListener("pressmove", planetPressMove);
+    planet2.addEventListener("pressup", planetPressUp);
 
-    planet2.on("pressmove", function (evt) {
-        evt.target.x = evt.stageX;
-        evt.target.y = evt.stageY;
-        AddScore();	//点数アップ関数！ lisaco
-    });
-    planet2.on("pressup", planetPressUp);
+    planet3.addEventListener("pressmove", planetPressMove);
+    planet3.addEventListener("pressup", planetPressUp);
 
-    planet3.on("pressmove", function (evt) {
-        evt.target.x = evt.stageX;
-        evt.target.y = evt.stageY;
-        AddScore();	//点数アップ関数！ lisaco
-    });
+    planet4.addEventListener("pressmove", planetPressMove);
+    planet4.addEventListener("pressup", planetPressUp);
 
-    planet3.on("pressup", planetPressUp);
-
-    planet4.on("pressmove", function (evt) {
-        evt.target.x = evt.stageX;
-        evt.target.y = evt.stageY;
-        AddScore();	//点数アップ関数！ lisaco
-    });
-
-    planet4.on("pressup", planetPressUp);
-
-    planet5.on("pressmove", function (evt) {
-        evt.target.x = evt.stageX;
-        evt.target.y = evt.stageY;
-        AddScore();	//点数アップ関数！ lisaco
-    });
-
-    planet5.on("pressup", planetPressUp);
+    planet5.addEventListener("pressmove", planetPressMove);
+    planet5.addEventListener("pressup", planetPressUp);
 
     rocket.on("click", function (evt) {
         app.bgmManager.stop();
         rocketClick();
     });
+}
+
+/**
+ * 惑星のイベント処理削除
+ */
+function detouchPlanetEvent() {
+    var planet1 = stage.getChildByName(game.planet1.name);
+    var planet2 = stage.getChildByName(game.planet2.name);
+    var planet3 = stage.getChildByName(game.planet3.name);
+    var planet4 = stage.getChildByName(game.planet4.name);
+    var planet5 = stage.getChildByName(game.planet5.name);
+    planet1.removeEventListener("pressmove", planetPressMove);
+    planet2.removeEventListener("pressmove", planetPressMove);
+    planet3.removeEventListener("pressmove", planetPressMove);
+    planet4.removeEventListener("pressmove", planetPressMove);
+    planet5.removeEventListener("pressmove", planetPressMove);
+}
+
+/**
+ * 惑星のイベント処理追加
+ */
+function touchPlanetEvent () {
+    var planet1 = stage.getChildByName(game.planet1.name);
+    var planet2 = stage.getChildByName(game.planet2.name);
+    var planet3 = stage.getChildByName(game.planet3.name);
+    var planet4 = stage.getChildByName(game.planet4.name);
+    var planet5 = stage.getChildByName(game.planet5.name);
+    planet1.addEventListener("pressmove", planetPressMove);
+    planet2.addEventListener("pressmove", planetPressMove);
+    planet3.addEventListener("pressmove", planetPressMove);
+    planet4.addEventListener("pressmove", planetPressMove);
+    planet5.addEventListener("pressmove", planetPressMove);
+ 
+}
+
+/**
+ * 惑星をドラッグアンドドロップさせる
+ * @param evt
+ */
+function planetPressMove(evt) {
+    evt.target.x = evt.stageX;
+    evt.target.y = evt.stageY;
+    AddScore(); //点数アップ関数！ lisaco
 }
 
 /**
@@ -398,6 +436,13 @@ function onOneSecond(rocket) {
     if (isHit) {
         gameClear();
     }
+
+    var meteor = stage.getChildByName(game.meteor1.name);
+    var meteorHit = isHitTest(rocket, meteor);
+    if (meteorHit) {
+        console.log(meteor.name + ' HIT!!');
+        crashMeteor();
+    }
 }
 
 function onOneFinish(lastFrame) {
@@ -415,14 +460,33 @@ function onOneFinish(lastFrame) {
  */
 function onClickStart(event) {
     var go = stage.getChildByName('go');
-    time_start = app.deltaTime;
-    app.currentTerm = 0;
-    flag_start = true;
+    detouchPlanetEvent();
     go.visible = false;
+    if(flag_start == false){
+        time_start = app.deltaTime;
+        flag_start = true;
+        
+    }else{
+
+    }
+    
+    app.currentTerm = 0;
+    
+    
     rocketTweenClear();
     request();
 }
 
+/**
+ * 隕石にぶつかった時
+ */
+function crashMeteor() {
+    resetAll();
+}
+
+/**
+ * ゲームクリア
+ */
 function gameClear() {
     if (app.isGameClear === true) return;
     app.isGameClear = true;
@@ -434,6 +498,10 @@ function gameClear() {
 
 }
 
+/**
+ * 通信処理
+ * @param lastFrame
+ */
 function request(lastFrame) {
     var p1 = stage.getChildByName(game.planet1.name);
     var p2 = stage.getChildByName(game.planet2.name);
@@ -515,6 +583,7 @@ function rocketClick(event) {
     //var app.bgmManager = createjs.Sound.createInstance('bgm');
     //app.bgmManager.play('none', 0, 0, 0, 1, 0);
 }
+
 function ClearSound(event) {
     //ロケット発射！
     var clearinstance = createjs.Sound.createInstance('se_clear');
@@ -535,3 +604,4 @@ function ClearSound(event) {
 // }
 
 //}
+

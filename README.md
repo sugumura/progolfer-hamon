@@ -3,7 +3,7 @@
 このプロジェクトはGlobal Game Jam 2017の熊本会場にて「Progolfer Hamon」チームが作成したゲーム「Space Traveler Hamon」のリポジトリです。
 Global Game Jamについては以下のサイトを参照してください。
 
-This project is a repository of the game "Space Traveler Hamon" created by the "Progolfer Hamon" team at the Kumamoto venue of Global Game Jam 2017.
+This project is a repository of the game "Space Traveler Hamon" created by the "Progolfer Hamon" team at the Kumamoto,Japan venue of Global Game Jam 2017.
 For Global Game Jam, please refer to the following site.
 
 http://globalgamejam.org/
