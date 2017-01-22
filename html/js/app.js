@@ -18,7 +18,6 @@ queue.on("complete", handleComplete, this);
 var score1 = new createjs.Text();
 var score2 = new createjs.Text();
 
-var scoretxt;
 var playerShip = 62.5;
 var retake_limit = 10;
 var retake_number = 0;
@@ -163,7 +162,6 @@ function init(event) {
 
     console.log('DOMContentLoaded', event);
     stage = new createjs.Stage("GameWindow");
-    scoretxt = 0;
 
     var background = setting.background();
     var sidebar = setting.sidebar();
@@ -472,8 +470,6 @@ function AddScore() {
         localStorage.setItem("Score",(time_limit - (time_current / 1000)) + ((retake_limit - retake_number)*100) );
         window.location.href = 'gameover.html';
     }
-	 
-     //score1.text = "score：" + ("0000" + scoretxt).slice(-4);
 }
 
 /**
