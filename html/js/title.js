@@ -84,11 +84,6 @@ function handleComplete(event) {
         start.style.display = "block";
     }, 4000)
     
-    start.on("click", function(evt) {
-        bgminstance.stop();
-        startClick();
-    });
-
 }
 
 function test(event) {
@@ -98,8 +93,3 @@ function test(event) {
     };
 }
 
-function startClick(event) {
-    var startinstance = createjs.Sound.createInstance('se_rocket');//ロケットの音と兼用
-    startinstance.play('none', 0, 0, 0, 1, 0);
-
-}
