@@ -8,13 +8,13 @@ queue.installPlugin(createjs.Sound);
 queue.on("complete", handleComplete, this);
 
 queue.loadManifest([
-    { id: "space", src: 'assets/images/Space_view.jpg' },
-    { id: "titlelogo", src: 'assets/images/Titlelogo.png' },
+    { id: "space", src: 'html/assets/images/Space_view.jpg' },
+    { id: "titlelogo", src: 'html/assets/images/Titlelogo.png' },
     //bgm 呼び出してるよ lisaco
-    { id: "bgm_title", src: 'assets/sounds/bgm_title.mp3' },
-    { id: "se_rocket", src: 'assets/sounds/se_rocket.mp3' },//start buttonで使う
+    { id: "bgm_title", src: 'html/assets/sounds/bgm_title.mp3' },
+    { id: "se_rocket", src: 'html/assets/sounds/se_rocket.mp3' },//start buttonで使う
 
-    { id: "start", src: 'assets/images/start.png' }
+    { id: "start", src: 'html/assets/images/start.png' }
 ]);
 
 var setting = {
@@ -89,7 +89,7 @@ function handleComplete(event) {
 function test(event) {
     // body...
     if (onClick('titlelogo')) {
-        window.location.href = './gameover.html'; // 通常の遷移
+        window.location.href = 'html/gameover.html'; // 通常の遷移
     };
 }
 
