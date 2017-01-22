@@ -276,50 +276,59 @@ function handleComplete(event) {
     stage.addChild(score1);
     stage.addChild(score2);
 
-    planet1.on("pressmove", function (evt) {
-        evt.target.x = evt.stageX;
-        evt.target.y = evt.stageY;
-        AddScore();	//点数アップ関数！ lisaco
-    });
+    planet1.addEventListener("pressmove", planetPressMove);
+    planet1.addEventListener("pressup", planetPressUp);
 
-    planet1.on("pressup", planetPressUp);
+    planet2.addEventListener("pressmove", planetPressMove);
+    planet2.addEventListener("pressup", planetPressUp);
 
-    planet2.on("pressmove", function (evt) {
-        evt.target.x = evt.stageX;
-        evt.target.y = evt.stageY;
-        AddScore();	//点数アップ関数！ lisaco
-    });
-    planet2.on("pressup", planetPressUp);
+    planet3.addEventListener("pressmove", planetPressMove);
+    planet3.addEventListener("pressup", planetPressUp);
 
-    planet3.on("pressmove", function (evt) {
-        evt.target.x = evt.stageX;
-        evt.target.y = evt.stageY;
-        AddScore();	//点数アップ関数！ lisaco
-    });
+    planet4.addEventListener("pressmove", planetPressMove);
+    planet4.addEventListener("pressup", planetPressUp);
 
-    planet3.on("pressup", planetPressUp);
-
-    planet4.on("pressmove", function (evt) {
-        evt.target.x = evt.stageX;
-        evt.target.y = evt.stageY;
-        AddScore();	//点数アップ関数！ lisaco
-    });
-
-    planet4.on("pressup", planetPressUp);
-
-    planet5.on("pressmove", function (evt) {
-        evt.target.x = evt.stageX;
-        evt.target.y = evt.stageY;
-        AddScore();	//点数アップ関数！ lisaco
-    });
-
-    planet5.on("pressup", planetPressUp);
+    planet5.addEventListener("pressmove", planetPressMove);
+    planet5.addEventListener("pressup", planetPressUp);
 
     rocket.on("click", function (evt) {
         bgminstance.stop();
         rocketClick();
     });
 
+}
+
+function detachPlanetEvent() {
+    var planet1 = stage.getChildByName(game.planet1.name);
+    var planet2 = stage.getChildByName(game.planet2.name);
+    var planet3 = stage.getChildByName(game.planet3.name);
+    var planet4 = stage.getChildByName(game.planet4.name);
+    var planet5 = stage.getChildByName(game.planet5.name);
+    planet1.removeEventListener("pressmove", planetPressMove);
+    planet2.removeEventListener("pressmove", planetPressMove);
+    planet3.removeEventListener("pressmove", planetPressMove);
+    planet4.removeEventListener("pressmove", planetPressMove);
+    planet5.removeEventListener("pressmove", planetPressMove);
+}
+
+function tachPlanetEvent () {
+    var planet1 = stage.getChildByName(game.planet1.name);
+    var planet2 = stage.getChildByName(game.planet2.name);
+    var planet3 = stage.getChildByName(game.planet3.name);
+    var planet4 = stage.getChildByName(game.planet4.name);
+    var planet5 = stage.getChildByName(game.planet5.name);
+    planet1.addEventListener("pressmove", planetPressMove);
+    planet2.addEventListener("pressmove", planetPressMove);
+    planet3.addEventListener("pressmove", planetPressMove);
+    planet4.addEventListener("pressmove", planetPressMove);
+    planet5.addEventListener("pressmove", planetPressMove);
+ 
+}
+
+function planetPressMove(evt) {
+    evt.target.x = evt.stageX;
+    evt.target.y = evt.stageY;
+    AddScore(); //点数アップ関数！ lisaco
 }
 
 /**
@@ -412,6 +421,7 @@ function onOneFinish(lastFrame) {
  * @param event
  */
 function onClickStart(event) {
+    detachPlanetEvent();
     var go = stage.getChildByName('go');
     time_start = app.deltaTime;
     app.currentTerm = 0;
@@ -511,4 +521,3 @@ function rocketClick(event) {
     //var bgminstance = createjs.Sound.createInstance('bgm');
     //bgminstance.play('none', 0, 0, 0, 1, 0);
 }
-
