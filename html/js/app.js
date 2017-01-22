@@ -482,7 +482,7 @@ function onClickStart(event) {
  */
 function crashMeteor() {
     var crushBgm = createjs.Sound.createInstance('se_rocket');
-        crushBgm.play('none', 0, 0, 0, 0.5, 0);   
+        crushBgm.play('none', 0, 0, 0, 2, 0);   
     resetAll();
 }
 
