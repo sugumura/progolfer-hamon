@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html>
 <head>
     <meta charset="utf-8">
@@ -15,7 +15,35 @@
     
 </head>
 <body>
-<canvas id="GameWindow" width="768" height="768"></canvas>
-<script src="js/app.js"></script>
+    <div>
+        <div style="float: left;width: 800px;">
+            <canvas id="GameWindow" width="768" height="768"></canvas>
+        </div>
+        <div style="float: left;width: 250px;">
+            <h2>Abstrct</h2>
+            <p>
+                This game aims to let the player return to the mother star by the swing-by using the gravity of the star, the spacecraft which continues constant velocity linear movement with fuel running out.
+            </p>
+            <p>
+                The platform is a web browser. Since the front end works with HTML 5 and Java Script, we do not use special plugins. However, it will not work with older web browsers.
+            </p>
+            <h2>How to play</h2>
+            <ol>
+                <li>Space is displayed on the screen. The mother star on the top, the spaceship on the bottom, the drop stars in the right side are displayed.</li>
+                <li>Player is drag  and drop star in space.</li>
+                <li>Click the "START" button to start the spacecraft. If the spaceship arrives at the mother star while avoiding obstacles it is the goal.</li>
+                <li>When caught by the star's gravity, it collides with the star and it becomes a game over.</li>
+                <li>Click the "Retry" button to return to the initial screen and play the game again.</li>
+                <li>If you fail three times, the game ends and you are switched to the result screen.</li>
+            </ol>
+            <h2>Auther</h2>
+            <p>Global Game Jam 2017 Kumamoto,Japan Progolfer-Hamon Team</p>
+            <h2>References</h2>
+            <p><a href="http://globalgamejam.org/">Global Game Jam</a></p>
+            <p><a href="http://ggj.igda.jp/">Global Game Jam Japan</a></p>
+            <p><a href="https://github.com/sugumura/progolfer-hamon">Github Repository</a></p>
+        </div>
+    </div>
+    <script src="js/app.js"></script>
 </body>
 </html>
