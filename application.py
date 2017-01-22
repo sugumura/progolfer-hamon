@@ -48,6 +48,9 @@ welcome = """
     <link rel="stylesheet" type="text/css" href="html/css/move.css" media="all">
 <body>
     <h1>Global Game Jam 2017 Kumamoto,Japan Progolfer-Hamon</h1>
+    <div id="box">
+        <p></p>
+    </div>
     <div id="fadein">
         <img src="html/assets/images/Titlelogo.png">
     </div>
