@@ -141,9 +141,9 @@ var asset = {
 };
 
 // playerShip
-// var player1 = asset.createAssets(queue.getResult('player1'), 680, 62.5);
+ // var player1 = asset.createAssets(queue.getResult('player1'), 600, 62.5);
 
-// stage.addChild(rocket);
+// stage.addChild(player1);
 
 
 /**
@@ -492,12 +492,3 @@ function rocketClick(event) {
     //bgminstance.play('none', 0, 0, 0, 1, 0);
 }
 
-// ゲームオーバーイベント
-
-//function gameOver(event){
-// if(衝突の条件){
-//  window.location.href = './gameover.html'; // 通常の遷移
-
-// }
-
-//}
