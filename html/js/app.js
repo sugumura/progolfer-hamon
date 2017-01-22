@@ -481,6 +481,8 @@ function onClickStart(event) {
  * 隕石にぶつかった時
  */
 function crashMeteor() {
+    var crushBgm = createjs.Sound.createInstance('se_rocket');
+        crushBgm.play('none', 0, 0, 0, 0.5, 0);   
     resetAll();
 }
 
