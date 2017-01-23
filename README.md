@@ -33,6 +33,8 @@ http://ggj2017kumamoto2f-env.ap-northeast-1.elasticbeanstalk.com/
 5. 「リトライ」ボタンをクリックすると初期画面に戻って再びゲームができます。
 6. 3回失敗するとゲーム終了しリザルト画面に切り替わります。
 
+English
+
 1. Space is displayed on the screen. The mother star on the top, the spaceship on the bottom, the drop stars in the right side are displayed.
 2. Player is drag  and drop star in space.
 3. Click the "START" button to start the spacecraft. If the spaceship arrives at the mother star while avoiding obstacles it is the goal.
