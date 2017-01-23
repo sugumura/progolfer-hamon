@@ -22,6 +22,10 @@ The platform is a web browser. Since the front end works with HTML 5 and Java Sc
 
 # 遊び方
 
+ゲームの実行は以下のURLへ移動してください。
+
+http://ggj2017kumamoto2f-env.ap-northeast-1.elasticbeanstalk.com/
+
 1. 画面に宇宙空間が表示されます。上に母星、下に宇宙船、右側にこれから配置する星が表示されます。
 2. 星をドラッグし宇宙空間に配置します。
 3. 「START」ボタンをクリックすると宇宙船が動き始めます。障害物をよけながらそのまま母星にたどり着けばゴールです。
